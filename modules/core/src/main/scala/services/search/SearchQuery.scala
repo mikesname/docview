@@ -17,5 +17,5 @@ case class SearchQuery(
   extraParams: Map[String, Any] = Map.empty,
   mode: SearchMode.Value = SearchMode.DefaultAll,
   user: Option[UserProfile] = None,
-  lang: Lang
+  lang: Option[Lang]
 )

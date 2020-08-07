@@ -227,7 +227,7 @@ trait PortalController
       implicit apiUser: ApiUser, request: RequestHeader): Future[Result] = {
     val format: String = request.getQueryString("format")
       .filter(formats.contains).getOrElse(formats.head)
-    val params = request.queryString.filterKeys(_ == "lang")
+    val params = request.queryString.filter(_._1 == "lang")
     userDataApi.stream(s"classes/$entityType/$id/$format", params = params,
       headers = Headers(HeaderNames.ACCEPT -> "text/xml,application/zip")).map { sr =>
       val ct = sr.headers.get(HeaderNames.CONTENT_TYPE)

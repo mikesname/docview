@@ -12,7 +12,7 @@
 @facetItem(fc: FacetClass[Facet], f: Facet) = {
     @if(f.applied) {
         <li class="remove-filter">
-            <a rel="nofollow" href="@pathWithoutFacet(fc, f.value, call.url, req.queryString.filterKeys(_!="page"))">
+            <a rel="nofollow" href="@pathWithoutFacet(fc, f.value, call.url, req.queryString.filter(_._1 != "page"))">
                 <span class="facet-name">@fc.pretty(f)</span>
                 <span class="facet-count">(@f.count)</span>
                 <span class="sr-only">@Messages("search.facets.remove")</span>
@@ -21,7 +21,7 @@
         </li>
     } else {
         <li class="apply-filter">
-            <a rel="nofollow" href="@pathWithFacet(fc, f.value, call.url, req.queryString.filterKeys(_!="page"))">
+            <a rel="nofollow" href="@pathWithFacet(fc, f.value, call.url, req.queryString.filter(_._1 != "page"))">
                 <span class="facet-name">@fc.pretty(f)</span>
                 <span class="facet-count">(@f.count)</span>
             </a>
@@ -61,14 +61,14 @@
                 <li class="@(if(f.applied) "remove-filter")">
                     @if(f.applied) {
                         <input type="hidden" name="@fc.param" value="@f.value" />
-                        <a rel="nofollow" class="remove-filter" href="@pathWithoutFacet(fc, f.value, call.url, req.queryString.filterKeys(_!="page"))">
+                        <a rel="nofollow" class="remove-filter" href="@pathWithoutFacet(fc, f.value, call.url, req.queryString.filter(_._1 != "page"))">
                             <span class="facet-name">@fc.pretty(f)</span>
                             <span class="facet-count">(@f.count)</span>
                             <span class="sr-only">@Messages("search.facets.remove")</span>
                             <i class="material-icons" aria-hidden="true" title="@Messages("search.facets.remove")">close</i>
                         </a>
                     } else {
-                        <a rel="nofollow" class="apply-filter" href="@pathWithFacet(fc, f.value, call.url, req.queryString.filterKeys(_!="page"))">
+                        <a rel="nofollow" class="apply-filter" href="@pathWithFacet(fc, f.value, call.url, req.queryString.filter(_._1 != "page"))">
                             <span class="facet-name">@fc.pretty(f)</span>
                             <span class="facet-count">(@f.count)</span>
                         </a>

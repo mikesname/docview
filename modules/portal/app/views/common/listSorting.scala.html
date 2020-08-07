@@ -10,7 +10,7 @@
         <li class="sort-option @{if(current.contains(sortKey)) "active"}">
         @defining((Messages(i18nKey), Messages(i18nKey + ".title"))) { case (name, title) =>
             @if(current.contains(sortKey)) {
-                <a rel="nofollow" title="@title" href="@utils.http.joinPath(req.path, req.queryString.filterKeys(_ != SearchParams.SORT))">
+                <a rel="nofollow" title="@title" href="@utils.http.joinPath(req.path, req.queryString.filter(_._1 != SearchParams.SORT))">
                 @name
                 </a>
             } else {

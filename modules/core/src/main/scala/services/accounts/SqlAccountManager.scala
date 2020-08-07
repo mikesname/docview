@@ -14,6 +14,7 @@ import play.api.db.Database
 import utils.PageParams
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.languageFeature.postfixOps
 
 
 @Singleton

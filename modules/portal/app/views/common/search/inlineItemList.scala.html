@@ -34,7 +34,7 @@
     @if(result.page.hasMore) {
         <a class="child-items-inline-list-more btn-progress"
             data-limit="@result.page.limit" data-page="@(result.page.page + 1)"
-            href="@utils.http.joinPath(req.path, req.queryString.filterKeys(_ != "modal")
+            href="@utils.http.joinPath(req.path, req.queryString.filter(_._1 != "modal")
                     .updated(PAGE_PARAM, Seq((result.page.page + 1).toString)))">
             @Messages("activity.fetchMore")
             <i class="fa fa-caret-down" aria-hidden="true"></i>

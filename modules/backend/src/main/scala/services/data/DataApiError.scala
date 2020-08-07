@@ -3,6 +3,7 @@ package services.data
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import play.api.mvc.RequestHeader
+import scala.collection
 
 sealed trait RestError extends RuntimeException
 
@@ -77,7 +78,7 @@ case class ServerError(error: String) extends RuntimeException(error) with RestE
 case class CriticalError(error: String) extends RuntimeException(error) with RestError
 
 case class BadJson(
-  error: Seq[(JsPath,Seq[JsonValidationError])],
+  error: collection.Seq[(JsPath, collection.Seq[JsonValidationError])],
   url: Option[String] = None,
   data: Option[String] = None
 ) extends RuntimeException(error.toString) with RestError {
