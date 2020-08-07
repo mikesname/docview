@@ -69,8 +69,8 @@ case class AccountForms @Inject() (config: Configuration, conf: AppConfig, oAuth
       BLANK_CHECK -> text, // honeypot
       AGREE_TERMS -> checked("signup.agreeTerms")
     )(SignupData.apply)(SignupData.unapply)
-     .verifying(formSubmissionTime(config))
-     .verifying(blankFieldIsBlank)
-     .verifying("signup.badPasswords", s => s.password == s.confirm)
+      .verifying(formSubmissionTime(config))
+      .verifying(blankFieldIsBlank)
+      .verifying("signup.badPasswords", s => s.password == s.confirm)
   )
 }

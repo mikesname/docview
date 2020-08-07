@@ -667,7 +667,7 @@ case class Accounts @Inject()(
     }
   }
 
-  private def sendResetEmail(name: String, emailAddress: String, uuid: UUID)(implicit request: RequestHeader) {
+  private def sendResetEmail(name: String, emailAddress: String, uuid: UUID)(implicit request: RequestHeader): String = {
     val email = Email(
       subject = "EHRI Password Reset",
       to = Seq(emailAddress),
@@ -677,7 +677,7 @@ case class Accounts @Inject()(
     mailer.send(email)
   }
 
-  private def sendValidationEmail(name: String, emailAddress: String, uuid: UUID)(implicit request: RequestHeader) {
+  private def sendValidationEmail(name: String, emailAddress: String, uuid: UUID)(implicit request: RequestHeader): String = {
     val email = Email(
       subject = "Please confirm your EHRI Account Email",
       from = s"EHRI Email Validation <${config.get[String]("ehri.portal.emails.help")}>",

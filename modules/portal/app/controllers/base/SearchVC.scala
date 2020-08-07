@@ -57,7 +57,7 @@ trait SearchVC {
 
       logger.debug(s"Elements: ${seq.length}, distinct: ${seq.distinct.length}")
 
-      globalConfig.configuration.getOptional[Int]("search.vc.maxDescendants").map { vcLimit =>
+      conf.configuration.getOptional[Int]("search.vc.maxDescendants").map { vcLimit =>
         if (seq.length > vcLimit) {
           logger.error(s"Truncating clauses on child item search for $id: items ${seq.length}")
           seq.distinct.take(vcLimit)

@@ -12,7 +12,7 @@ class FormSerializationSpec extends PlaySpecification with ResourceUtils {
 
   def formData(html: Html): Map[String,String] = {
     val elements: java.util.ArrayList[Element] = Jsoup.parse(html.body).select("input")
-    import scala.collection.JavaConverters._
+    import scala.jdk.CollectionConverters._
     elements.asScala.map(e => e.attr("name") -> e.attr("value")).toMap
   }
 

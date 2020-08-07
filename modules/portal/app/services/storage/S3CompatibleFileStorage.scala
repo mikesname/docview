@@ -20,7 +20,7 @@ import software.amazon.awssdk.services.s3.presigner.S3Presigner
 import software.amazon.awssdk.services.s3.presigner.model.{GetObjectPresignRequest, PutObjectPresignRequest}
 
 import java.net.URI
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.concurrent.duration.{FiniteDuration, _}
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -121,7 +121,7 @@ case class S3CompatibleFileStorage(
         Option(meta.contentType),
         Option(meta.versionId)
       )
-      Some((fm, meta.metadata.asScala.toMap))
+      Some((fm, meta.metadata.asScala.toSeq.toMap))
     } catch {
       case _: SdkException => None
     }
@@ -255,7 +255,7 @@ case class S3CompatibleFileStorage(
     val lvr = afterVersion.fold(rb2)(id => rb2.versionIdMarker(id)).build()
 
     val r = client.listObjectVersions(lvr)
-    FileList(r.versions().asScala.map { f =>
+    FileList(r.versions().asScala.toSeq.map { f =>
       FileMeta(
         name,
         f.key,
@@ -292,7 +292,7 @@ case class S3CompatibleFileStorage(
     val lor = prefix.fold(rb2)(p => rb2.prefix(p)).build()
 
     val resp = client.listObjects(lor)
-      FileList(resp.contents().asScala.map { f =>
+      FileList(resp.contents().asScala.toSeq.map { f =>
       FileMeta(
         name,
         f.key,

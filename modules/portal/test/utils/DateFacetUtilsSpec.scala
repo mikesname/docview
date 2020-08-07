@@ -7,8 +7,8 @@ import services.search.{End, Start, Val}
 class DateFacetUtilsSpec extends PlaySpecification with play.api.i18n.I18nSupport with LangImplicits {
   import utils.DateFacetUtils._
 
-  implicit val messagesApi: MessagesApi = new DefaultMessagesApi()
   private implicit val lang: Lang = Lang("en")
+  override implicit val messagesApi: DefaultMessagesApi = new DefaultMessagesApi()
 
   val dateFacetUtils = DateFacetUtils()
 

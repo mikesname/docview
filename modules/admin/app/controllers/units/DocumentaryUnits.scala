@@ -131,7 +131,9 @@ case class DocumentaryUnits @Inject()(
     for (fileHandles <- importLogs.getHandles(id)) yield {
       val eventHandles: Map[String, Seq[(String, java.net.URI)]] = fileHandles
         .groupBy(_.eventId)
+        .view
         .mapValues(_.map(f => (f.key, damStorage.uri(f.key, duration = 2.hours, versionId = f.versionId))))
+        .toMap
 
       Ok(views.html.admin.documentaryUnit.eventList(
         request.item, request.page, request.params, eventHandles))

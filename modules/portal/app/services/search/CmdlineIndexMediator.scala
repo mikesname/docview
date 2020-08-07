@@ -44,7 +44,7 @@ case class CmdlineIndexMediatorHandle(
 
     def out(s: => String): Unit = report()
 
-    def err(s: => String) {
+    def err(s: => String): Unit = {
       errBuffer.add(s)
       // This is a hack. All progress goes to stdout but we only
       // want to buffer that which contains the format:
@@ -53,7 +53,7 @@ case class CmdlineIndexMediatorHandle(
       else chan.foreach(_ ! processFunc(s))
     }
 
-    import scala.collection.JavaConverters._
+    import scala.jdk.CollectionConverters._
     def lastMessages: List[String] = errBuffer.asScala.toList
 
     private def report(): Unit = {
