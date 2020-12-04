@@ -14,7 +14,6 @@ import play.api.db.Database
 import utils.PageParams
 
 import scala.concurrent.{ExecutionContext, Future}
-import scala.languageFeature.postfixOps
 
 
 @Singleton
@@ -204,10 +203,8 @@ case class SqlAccountManager @Inject()(db: Database, actorSystem: ActorSystem) e
 object SqlAccountManager {
   import anorm.{Column, ParameterMetaData, ToStatement, TypeDoesNotMatch}
 
-  implicit def pwToStatement: ToStatement[HashedPassword] = new ToStatement[HashedPassword] {
-    def set(s: java.sql.PreparedStatement, index: Int, aValue: HashedPassword): Unit =
-      s.setString(index, aValue.s)
-  }
+  implicit def pwToStatement: ToStatement[HashedPassword] =
+    (s: java.sql.PreparedStatement, index: Int, aValue: HashedPassword) => s.setString(index, aValue.s)
 
   implicit object HashedPasswordParameterMetaData extends ParameterMetaData[HashedPassword] {
     val sqlType: String = ParameterMetaData.StringParameterMetaData.sqlType

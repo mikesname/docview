@@ -60,7 +60,7 @@ package object search {
   def pathWithFacet(fc: FacetClass[_], f: String, path: String, qs: Map[String, Seq[String]]): String =
     utils.http.joinPath(path, if (qs.contains(fc.param)) {
       qs.collect {
-        case (q, values) if q == fc.param => q -> values.union(Seq(f)).distinct.sorted
+        case (q, values) if q == fc.param => q -> (values :+ f).distinct.sorted
         case pair => pair
       }
     } else qs.updated(fc.param, Seq(f)))
@@ -77,7 +77,7 @@ package object search {
   def pathWithGenericFacet(fc: FacetClass[_], f: String, path: String, qs: Map[String, Seq[String]]): String =
     utils.http.joinPath(path, if (qs.contains(SearchParams.FACET)) {
       qs.collect {
-        case (k, values) if k == SearchParams.FACET => k -> values.union(Seq(s"${fc.param}:$f")).distinct.sorted
+        case (k, values) if k == SearchParams.FACET => k -> (values :+ s"${fc.param}:$f").distinct.sorted
         case pair => pair
       }
     } else qs.updated(SearchParams.FACET, Seq(s"${fc.param}:$f")))
