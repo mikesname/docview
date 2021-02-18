@@ -15,7 +15,7 @@ import sbt.Keys.{compile, mappings, resourceDirectory}
 logBuffered := false
 logLevel := Level.Info
 
-val projectScalaVersion = "2.13.3"
+val projectScalaVersion = "2.13.4"
 val appName = "docview"
 val appVersion = "2.0.0"
 
