@@ -1,6 +1,5 @@
 <script>
 
-import _ from 'lodash';
 import FilterControl from './filter-control';
 import ValidateButton from './validate-button';
 import DeleteButton from './delete-button';

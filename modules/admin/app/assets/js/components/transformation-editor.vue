@@ -1,6 +1,5 @@
 <script>
 
-import _ from 'lodash';
 import ModalWindow from './modal-window';
 import XsltEditor from './xslt-editor';
 import XqueryEditor from './xquery-editor';

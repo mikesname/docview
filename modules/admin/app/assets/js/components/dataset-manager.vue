@@ -1,6 +1,5 @@
 <script>
 
-import _ from 'lodash';
 import DatasetForm from './dataset-form';
 import OaipmhManager from './oaipmh-manager';
 import UploadManager from './upload-manager';

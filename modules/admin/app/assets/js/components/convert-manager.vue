@@ -1,6 +1,5 @@
 <script>
 
-import _ from 'lodash';
 import Draggable from 'vuedraggable';
 import FilePicker from './file-picker';
 import ConvertConfig from './convert-config';

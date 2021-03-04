@@ -1,6 +1,5 @@
 <script>
 
-import _ from 'lodash';
 import FilePickerSuggestion from './file-picker-suggestion';
 
 export default {
