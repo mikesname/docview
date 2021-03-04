@@ -104,12 +104,15 @@
 
       <script src="@controllers.admin.routes.AdminAssets.versioned("js/datamanager-dao.js")"></script>
       <script src="@controllers.admin.routes.AdminAssets.versioned("js/datamanager-common.js")"></script>
-      <script src="@controllers.admin.routes.AdminAssets.versioned("js/components/transformation-editor.js")"></script>
-      <script src="@controllers.admin.routes.AdminAssets.versioned("js/components/rs-manager.js")"></script>
-      <script src="@controllers.admin.routes.AdminAssets.versioned("js/components/oaipmh-manager.js")"></script>
-      <script src="@controllers.admin.routes.AdminAssets.versioned("js/components/upload-manager.js")"></script>
-      <script src="@controllers.admin.routes.AdminAssets.versioned("js/components/ingest-manager.js")"></script>
-      <script src="@controllers.admin.routes.AdminAssets.versioned("js/components/convert-manager.js")"></script>
-      <script src="@controllers.admin.routes.AdminAssets.versioned("js/datamanager.js")"></script>
+      <script src="@controllers.admin.routes.AdminAssets.versioned("js/datamanager-app.js")"></script>
+      <script>
+        Vue.set(Vue.prototype, '_', _);
+        var app = new Vue({
+          el: '#vue-app',
+          render: function(html) {
+              return html(DatamanagerApp.default);
+          }
+        });
+      </script>
     </body>
 </html>

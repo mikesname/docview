@@ -350,8 +350,17 @@ lazy val api = Project(appName + "-api", file("modules/api"))
 
 lazy val admin = Project(appName + "-admin", file("modules/admin"))
   .enablePlugins(play.sbt.PlayScala)
+  .enablePlugins(SbtVuefy)
   .settings(libraryDependencies ++= adminDependencies)
   .settings(commonSettings ++ webAppSettings)
+  .settings(
+    // The commands that triggers production build (as in `webpack -p`)
+    Assets / VueKeys.vuefy / VueKeys.prodCommands := Set("stage"),
+    // The location of the webpack binary.
+    Assets / VueKeys.vuefy / VueKeys.webpackBinary := "./node_modules/.bin/webpack",
+    // The location of the webpack configuration.
+    Assets / VueKeys.vuefy / VueKeys.webpackConfig := "./webpack.config.js",
+  )
   .dependsOn(api % "test->test;compile->compile")
 
 lazy val guides = Project(appName + "-guides", file("modules/guides"))
