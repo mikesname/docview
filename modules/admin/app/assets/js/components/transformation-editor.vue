@@ -5,10 +5,15 @@ import XsltEditor from './xslt-editor';
 import XqueryEditor from './xquery-editor';
 import FilePicker from './file-picker';
 import DragHandle from './drag-handle';
+import PanelFilePreview from './panel-file-preview';
+import PanelConvertPreview from './panel-convert-preview';
+import ModalAlert from './modal-alert';
+
+import MixinTwoPanel from './mixin-two-panel';
 
 export default {
-  components: {ModalWindow, XsltEditor, XqueryEditor, FilePicker, DragHandle},
-  mixins: [twoPanelMixin],
+  components: {ModalWindow, XsltEditor, XqueryEditor, FilePicker, DragHandle, PanelFilePreview, PanelConvertPreview, ModalAlert},
+  mixins: [MixinTwoPanel],
   props: {
     id: String,
     name: String,
@@ -201,7 +206,7 @@ export default {
             </div>
             <div id="transformation-editor-previews">
               <div class="transformation-editor-preview-window">
-                <preview
+                <panel-file-preview
                     v-if="previewing !== null"
                     v-bind:dataset-id="datasetId"
                     v-bind:file-stage="fileStage"
@@ -216,7 +221,7 @@ export default {
                 </div>
               </div>
               <div class="transformation-editor-preview-window">
-                <convert-preview
+                <panel-convert-preview
                     v-if="previewing !== null"
                     v-bind:dataset-id="datasetId"
                     v-bind:file-stage="fileStage"

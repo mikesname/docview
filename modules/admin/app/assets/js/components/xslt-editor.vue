@@ -1,4 +1,7 @@
 <script>
+
+// import CodeMirror from 'codemirror';
+
 export default {
   props: {
     value: String,

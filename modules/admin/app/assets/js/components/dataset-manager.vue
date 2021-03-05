@@ -7,9 +7,11 @@ import IngestManager from './ingest-manager';
 import RsManager from './rs-manager';
 import ConvertManager from './convert-manager';
 
+import MixinUtil from './mixin-util';
+
 export default {
   components: {DatasetForm, OaipmhManager, UploadManager, IngestManager, RsManager, ConvertManager},
-  mixins: [utilMixin],
+  mixins: [MixinUtil],
   props: {
     config: Object,
     api: DAO,

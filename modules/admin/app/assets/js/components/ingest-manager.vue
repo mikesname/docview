@@ -5,13 +5,22 @@ import ValidateButton from './validate-button';
 import DeleteButton from './delete-button';
 import FilesTable from './files-table';
 import DragHandle from './drag-handle';
-import InfoModal from './info-modal';
+import ModalInfo from './modal-info';
 import LogWindow from './log-window';
 import IngestOptionsPanel from './ingest-options-panel';
+import PanelFilePreview from './panel-file-preview';
+
+import MixinTwoPanel from './mixin-two-panel';
+import MixinValidator from './mixin-validator';
+import MixinError from './mixin-error';
+import MixinPreview from './mixin-preview';
+import MixinStage from './mixin-stage';
+import MixinUtil from './mixin-util';
+
 
 export default {
-  components: {FilterControl, FilesTable, LogWindow, DragHandle, InfoModal, ValidateButton, DeleteButton, IngestOptionsPanel},
-  mixins: [stageMixin, twoPanelMixin, previewMixin, validatorMixin, errorMixin, utilMixin],
+  components: {FilterControl, FilesTable, LogWindow, DragHandle, ModalInfo, PanelFilePreview, ValidateButton, DeleteButton, IngestOptionsPanel},
+  mixins: [MixinStage, MixinTwoPanel, MixinPreview, MixinValidator, MixinError, MixinUtil],
   props: {
     datasetId: String,
     fileStage: String,
@@ -152,7 +161,7 @@ export default {
           v-on:update="loadPropertyConfigs"
           v-on:close="showOptions = false" />
 
-      <info-modal v-if="fileInfo !== null" v-bind:file-info="fileInfo" v-on:close="fileInfo = null"/>
+      <modal-info v-if="fileInfo !== null" v-bind:file-info="fileInfo" v-on:close="fileInfo = null"/>
     </div>
 
     <div id="ingest-panel-container" class="panel-container">
@@ -218,7 +227,7 @@ export default {
 
         <div class="status-panels">
           <div class="status-panel" v-show="tab === 'preview'">
-            <preview v-bind:dataset-id="datasetId"
+            <panel-file-preview v-bind:dataset-id="datasetId"
                      v-bind:file-stage="fileStage"
                      v-bind:previewing="previewing"
                      v-bind:panel-size="panelSize"

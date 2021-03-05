@@ -4,14 +4,23 @@ import FilterControl from './filter-control';
 import ValidateButton from './validate-button';
 import DeleteButton from './delete-button';
 import OaipmhConfigModal from './oaipmh-config-modal';
+import PanelFilePreview from './panel-file-preview';
 import FilesTable from './files-table';
 import DragHandle from './drag-handle';
-import InfoModal from './info-modal';
+import ModalInfo from './modal-info';
 import LogWindow from './log-window';
 
+import MixinStage from "./mixin-stage";
+import MixinTwoPanel from "./mixin-two-panel";
+import MixinPreview from './mixin-preview';
+import MixinValidator from "./mixin-validator";
+import MixinError from "./mixin-error";
+import MixinUtil from './mixin-util';
+
+
 export default {
-  components: {FilterControl, FilesTable, DeleteButton, ValidateButton, OaipmhConfigModal, DragHandle, InfoModal, LogWindow},
-  mixins: [stageMixin, twoPanelMixin, previewMixin, validatorMixin, errorMixin, utilMixin],
+  components: {FilterControl, FilesTable, DeleteButton, ValidateButton, PanelFilePreview, OaipmhConfigModal, DragHandle, ModalInfo, LogWindow},
+  mixins: [MixinStage, MixinTwoPanel, MixinValidator, MixinError, MixinPreview, MixinUtil],
   props: {
     fileStage: String,
     config: Object,
@@ -132,7 +141,7 @@ export default {
           v-on:error="showError"
           v-on:close="showOptions = false"/>
 
-      <info-modal v-if="fileInfo !== null" v-bind:file-info="fileInfo" v-on:close="fileInfo = null"/>
+      <modal-info v-if="fileInfo !== null" v-bind:file-info="fileInfo" v-on:close="fileInfo = null"/>
     </div>
 
     <div id="oaipmh-panel-container" class="panel-container">
@@ -198,7 +207,7 @@ export default {
 
         <div class="status-panels">
           <div class="status-panel" v-show="tab === 'preview'">
-            <preview v-bind:dataset-id="datasetId"
+            <panel-file-preview v-bind:dataset-id="datasetId"
                      v-bind:file-stage="fileStage"
                      v-bind:previewing="previewing"
                      v-bind:panel-size="panelSize"

@@ -7,6 +7,14 @@ import TransformationEditor from './transformation-editor';
 import TransformationItem from './transformation-item';
 import LogWindow from './log-window';
 import DragHandle from './drag-handle';
+import PanelConvertPreview from './panel-convert-preview';
+
+import MixinTwoPanel from './mixin-two-panel';
+import MixinPreviewPanel from './mixin-preview-panel';
+import MixinValidator from './mixin-validator';
+import MixinError from './mixin-error';
+import MixinUtil from './mixin-util';
+
 
 let initialConvertState = function(config) {
   return {
@@ -27,8 +35,8 @@ let initialConvertState = function(config) {
 };
 
 export default {
-  components: {Draggable, FilePicker, ConvertConfig, TransformationEditor, TransformationItem, LogWindow, DragHandle},
-  mixins: [twoPanelMixin, previewMixin, validatorMixin, errorMixin, utilMixin],
+  components: {Draggable, FilePicker, ConvertConfig, PanelConvertPreview, TransformationEditor, TransformationItem, LogWindow, DragHandle},
+  mixins: [MixinTwoPanel, MixinValidator, MixinError, MixinUtil],
   props: {
     datasetId: String,
     fileStage: String,
@@ -307,7 +315,7 @@ export default {
 
         <div class="status-panels">
           <div class="status-panel" v-show="tab === 'preview'">
-            <convert-preview
+            <panel-convert-preview
                 v-bind:dataset-id="datasetId"
                 v-bind:file-stage="previewStage"
                 v-bind:mappings="mappings"

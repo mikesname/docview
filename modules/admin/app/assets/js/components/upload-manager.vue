@@ -5,9 +5,15 @@ import ValidateButton from './validate-button';
 import DeleteButton from './delete-button';
 import FilesTable from './files-table';
 import DragHandle from './drag-handle';
-import InfoModal from './info-modal';
+import ModalInfo from './modal-info';
 import LogWindow from './log-window';
 import UploadProgress from './upload-progress';
+import PanelFilePreview from './panel-file-preview';
+import MixinStage from "./mixin-stage";
+import MixinTwoPanel from "./mixin-two-panel";
+import MixinPreview from "./mixin-preview";
+import MixinValidator from "./mixin-validator";
+import MixinError from "./mixin-error";
 
 /**
  * Custom Error class
@@ -51,8 +57,8 @@ function sequentialUpload(uploadFunc, argArray, index, {done, cancelled}) {
 }
 
 export default {
-  components: {FilterControl, FilesTable, LogWindow, DragHandle, InfoModal, ValidateButton, DeleteButton, UploadProgress},
-  mixins: [stageMixin, twoPanelMixin, previewMixin, validatorMixin, errorMixin, utilMixin],
+  components: {FilterControl, FilesTable, LogWindow, DragHandle, ModalInfo, PanelFilePreview, ValidateButton, DeleteButton, UploadProgress},
+  mixins: [MixinStage, MixinTwoPanel, MixinPreview, MixinValidator, MixinError],
   props: {
     datasetId: String,
     fileStage: String,
@@ -204,7 +210,7 @@ export default {
         Upload Files...
       </button>
 
-      <info-modal v-if="fileInfo !== null" v-bind:file-info="fileInfo" v-on:close="fileInfo = null"/>
+      <modal-info v-if="fileInfo !== null" v-bind:file-info="fileInfo" v-on:close="fileInfo = null"/>
     </div>
 
     <div id="upload-panel-container" class="panel-container">
@@ -271,7 +277,7 @@ export default {
 
         <div class="status-panels">
           <div class="status-panel" v-show="tab === 'preview'">
-            <preview v-bind:dataset-id="datasetId"
+            <panel-file-preview v-bind:dataset-id="datasetId"
                      v-bind:file-stage="fileStage"
                      v-bind:previewing="previewing"
                      v-bind:panel-size="panelSize"

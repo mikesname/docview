@@ -7,10 +7,11 @@ if (typeof window !== 'undefined') {
 }
 
 import DatasetManager from './components/dataset-manager';
+import MixinUtil from './components/mixin-util';
 
 export default {
   components: {DatasetManager},
-  mixins: [utilMixin],
+  mixins: [MixinUtil],
   data: function() {
     return {
       config: CONFIG,
