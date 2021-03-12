@@ -1,6 +1,8 @@
 <script>
 
-// import CodeMirror from 'codemirror';
+import CodeMirror from 'codemirror';
+import 'codemirror/lib/codemirror.css';
+import 'codemirror/mode/xml/xml';
 
 export default {
   props: {

@@ -1,5 +1,6 @@
 "use strict";
 
+let path = require('path');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 module.exports = {
@@ -11,6 +12,13 @@ module.exports = {
       {
         test: /\.vue$/,
         loader: 'vue-loader',
+      },
+      {
+        test: /\.css$/i,
+        use: [
+          'style-loader',
+          'css-loader'
+        ],
       },
       {
         test: /\.scss$/,
@@ -31,6 +39,6 @@ module.exports = {
     ]
     },
   resolve: {
-    extensions: ['.ts', '.js', '.vue']
+    extensions: ['.ts', '.js', '.vue', '.css']
   }
 };
