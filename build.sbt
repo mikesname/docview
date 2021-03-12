@@ -9,10 +9,9 @@ import play.core.PlayVersion.{akkaHttpVersion, akkaVersion}
 import play.sbt.PlayImport._
 import play.sbt.routes.RoutesKeys._
 import play.twirl.sbt.Import.TwirlKeys.templateImports
-import sbt.Keys.mappings
+import sbt.Keys.{compile, mappings, resourceDirectory}
 
 
-parallelExecution in ThisBuild := false
 logBuffered := false
 logLevel := Level.Info
 
@@ -148,35 +147,32 @@ val commonSettings = Seq(
 
   version := appVersion,
 
-  scalaVersion in ThisBuild := projectScalaVersion,
+  ThisBuild / scalaVersion := projectScalaVersion,
 
   // Increase the JVM heap to avoid running
   // out of space during the memory intensive integration
   // tests. Additionally, set the path to the test config
   // file as an env var.
-  javaOptions in Test ++= Seq(
+  Test / javaOptions ++= Seq(
     "-Xmx1G",
     "-XX:+CMSClassUnloadingEnabled",
-    s"-Dconfig.file=${(baseDirectory in LocalRootProject).value / "conf" / "test.conf"}",
-    s"-Dlogger.file=${(baseDirectory in LocalRootProject).value / "conf" / "logback-play-dev.xml"}"
+    s"-Dconfig.file=${(LocalRootProject / baseDirectory).value / "conf" / "test.conf"}",
+    s"-Dlogger.file=${(LocalRootProject / baseDirectory).value / "conf" / "logback-play-dev.xml"}"
   ),
 
   // Show warnings and deprecations
-  scalacOptions in ThisBuild ++= Seq(
+  ThisBuild / scalacOptions ++= Seq(
     "-encoding", "UTF-8",
     "-Ywarn-unused:imports",
     "-unchecked",
     "-deprecation"
   ),
 
-  // Don't execute tests in parallel
-  parallelExecution := false,
-
   resolvers ++= additionalResolvers,
 
   // Disable documentation generation
-  sources in (Compile, doc) := Seq.empty,
-  publishArtifact in (Compile, packageDoc) := false
+  Compile /  doc / sources := Seq.empty,
+  Compile /  packageDoc / publishArtifact := false
 )
 
 val webAppSettings = Seq(
@@ -237,14 +233,14 @@ val webAppSettings = Seq(
   },
 
   // Classes to auto-import into templates
-  templateImports in Compile ++= Seq(
+  Compile / templateImports ++= Seq(
     "config._",
     "cookies._",
   ),
 
   // SBT magic: http://stackoverflow.com/a/12772739/285374
   // pick up additional resources in test
-  resourceDirectory in Test := baseDirectory.apply {
+  Test / resourceDirectory := baseDirectory.apply {
     baseDir: File => baseDir / "test/resources"
   }.value,
 
@@ -252,9 +248,8 @@ val webAppSettings = Seq(
   JsEngineKeys.engineType := JsEngineKeys.EngineType.Node,
 
   // Check the messages files on compilation
-  compile in Compile := {
-    validateMessages.value
-    (compile in Compile).value
+  Compile / compile := {
+    (Compile / compile).dependsOn(validateMessages).value
   }
 )
 
@@ -277,10 +272,10 @@ val resourceSettings = Seq(
   // is loaded dynamically by file URL from within the transform.xqy script.
   // This means we need to copy it at staging time from the admin module to the main
   // conf directory.
-  (PlayKeys.playExternalizedResources in Compile) += file("modules/admin/conf/xtra.xqm") -> "xtra.xqm",
+  (Compile / PlayKeys.playExternalizedResources) += file("modules/admin/conf/xtra.xqm") -> "xtra.xqm",
 
   // Filter out excluded resources from packaging
-  mappings in Universal := (mappings in Universal).value.filterNot { case (f, s) =>
+  Universal / mappings := (Universal / mappings).value.filterNot { case (f, s) =>
     excludedResources contains f.getName
   },
 )
@@ -311,7 +306,7 @@ lazy val portal = Project(appName + "-portal", file("modules/portal"))
     uglifyCompress := false,
 
     // Should really add cssCompress stage here but it's too slow currently
-    pipelineStages in Assets := Seq(concat, uglify, digest, gzip),
+    Assets / pipelineStages := Seq(concat, uglify, digest, gzip),
     Concat.groups := Seq(
       "js/script-pre.js" -> group(
         Seq(
