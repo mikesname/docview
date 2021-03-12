@@ -1,18 +1,18 @@
 <script>
 
 import Draggable from 'vuedraggable';
-import FilePicker from './file-picker';
-import ConvertConfig from './convert-config';
-import TransformationEditor from './transformation-editor';
-import TransformationItem from './transformation-item';
-import LogWindow from './log-window';
-import DragHandle from './drag-handle';
-import PanelConvertPreview from './panel-convert-preview';
+import FilePicker from './_file-picker';
+import ConvertConfig from './_convert-config';
+import TransformationEditor from './_transformation-editor';
+import TransformationItem from './_transformation-item';
+import LogWindow from './_log-window';
+import DragHandle from './_drag-handle';
+import PanelConvertPreview from './_panel-convert-preview';
 
-import MixinTwoPanel from './mixin-two-panel';
-import MixinValidator from './mixin-validator';
-import MixinError from './mixin-error';
-import MixinUtil from './mixin-util';
+import MixinTwoPanel from './_mixin-two-panel';
+import MixinValidator from './_mixin-validator';
+import MixinError from './_mixin-error';
+import MixinUtil from './_mixin-util';
 import DAO from '../dao';
 
 import _partition from 'lodash/partition';

@@ -1,6 +1,6 @@
 <script>
 
-import ModalWindow from './modal-window';
+import ModalWindow from './_modal-window';
 import DAO from '../dao';
 
 export default {

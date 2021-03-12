@@ -1,6 +1,6 @@
 <script>
 
-import FilePickerSuggestion from './file-picker-suggestion';
+import FilePickerSuggestion from './_file-picker-suggestion';
 
 import _debounce from 'lodash/debounce';
 

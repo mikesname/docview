@@ -1,7 +1,7 @@
 <script>
 
 import {prettyDate, humanFileSize} from "../common";
-import ModalWindow from './modal-window';
+import ModalWindow from './_modal-window';
 
 export default {
   components: {ModalWindow},

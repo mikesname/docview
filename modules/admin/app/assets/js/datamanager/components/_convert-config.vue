@@ -1,7 +1,7 @@
 <script>
 
-import ModalWindow from './modal-window';
-import FilePicker from './file-picker';
+import ModalWindow from './_modal-window';
+import FilePicker from './_file-picker';
 import DAO from '../dao';
 
 export default {

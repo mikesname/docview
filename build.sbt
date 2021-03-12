@@ -289,6 +289,7 @@ lazy val backend = Project(appName + "-backend", file("modules/backend"))
 
 lazy val core = Project(appName + "-core", file("modules/core"))
   .enablePlugins(play.sbt.PlayScala)
+  .disablePlugins(SbtVuefy, SbtConcat, SbtDigest, SbtGzip, SbtUglify, SbtSassify)
   .settings(name := appName + "-core", libraryDependencies ++= coreDependencies)
   .settings(commonSettings: _*)
   .dependsOn(backend % "test->test;compile->compile")
@@ -296,6 +297,7 @@ lazy val core = Project(appName + "-core", file("modules/core"))
 lazy val portal = Project(appName + "-portal", file("modules/portal"))
   .enablePlugins(play.sbt.PlayScala)
   .enablePlugins(SbtWeb)
+  .disablePlugins(SbtVuefy)
   .settings(commonSettings ++ webAppSettings: _*)
   .settings(
     routesImport += "models.view._",
@@ -339,13 +341,14 @@ lazy val portal = Project(appName + "-portal", file("modules/portal"))
 
 lazy val api = Project(appName + "-api", file("modules/api"))
   .enablePlugins(play.sbt.PlayScala)
+  .disablePlugins(SbtVuefy, SbtConcat, SbtDigest, SbtGzip, SbtUglify, SbtSassify)
   .settings(libraryDependencies += "org.everit.json" % "org.everit.json.schema" % "1.3.0")
   .settings(commonSettings ++ webAppSettings)
   .dependsOn(portal % "test->test;compile->compile")
 
 lazy val admin = Project(appName + "-admin", file("modules/admin"))
   .enablePlugins(play.sbt.PlayScala)
-  .enablePlugins(SbtVuefy)
+  .disablePlugins(SbtConcat, SbtDigest, SbtGzip, SbtUglify)
   .settings(libraryDependencies ++= adminDependencies)
   .settings(commonSettings ++ webAppSettings)
   .settings(
@@ -360,6 +363,7 @@ lazy val admin = Project(appName + "-admin", file("modules/admin"))
 
 lazy val guides = Project(appName + "-guides", file("modules/guides"))
   .enablePlugins(play.sbt.PlayScala)
+  .disablePlugins(SbtVuefy, SbtConcat, SbtDigest, SbtGzip, SbtUglify)
   .settings(commonSettings ++ webAppSettings)
   .dependsOn(admin)
 

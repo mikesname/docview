@@ -1,7 +1,7 @@
 <script>
 
-import DatasetManager from './components/dataset-manager';
-import MixinUtil from './components/mixin-util';
+import DatasetManager from './components/_dataset-manager';
+import MixinUtil from './components/_mixin-util';
 import DAO from "./dao";
 
 

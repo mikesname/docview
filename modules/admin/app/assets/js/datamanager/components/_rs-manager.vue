@@ -1,21 +1,21 @@
 <script>
 
-import FilterControl from './filter-control';
-import ValidateButton from './validate-button';
-import DeleteButton from './delete-button';
-import FilesTable from './files-table';
-import DragHandle from './drag-handle';
-import PanelFilePreview from './panel-file-preview';
-import ModalInfo from './modal-info';
-import LogWindow from './log-window';
-import RsConfigModal from './rs-config-modal';
+import FilterControl from './_filter-control';
+import ValidateButton from './_validate-button';
+import DeleteButton from './_delete-button';
+import FilesTable from './_files-table';
+import DragHandle from './_drag-handle';
+import PanelFilePreview from './_panel-file-preview';
+import ModalInfo from './_modal-info';
+import LogWindow from './_log-window';
+import RsConfigModal from './_rs-config-modal';
 
-import MixinTwoPanel from './mixin-two-panel';
-import MixinValidator from './mixin-validator';
-import MixinPreview from './mixin-preview';
-import MixinError from './mixin-error';
-import MixinStage from './mixin-stage';
-import MixinUtil from './mixin-util';
+import MixinTwoPanel from './_mixin-two-panel';
+import MixinValidator from './_mixin-validator';
+import MixinPreview from './_mixin-preview';
+import MixinError from './_mixin-error';
+import MixinStage from './_mixin-stage';
+import MixinUtil from './_mixin-util';
 
 import DAO from '../dao';
 

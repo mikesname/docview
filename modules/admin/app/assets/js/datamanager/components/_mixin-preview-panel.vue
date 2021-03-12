@@ -1,6 +1,6 @@
 <script>
 
-import MixinError from "./mixin-error";
+import MixinError from './_mixin-error';
 import CodeMirror from 'codemirror';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/xml/xml';

@@ -1,6 +1,6 @@
 <script>
 
-import ModalWindow from './modal-window';
+import ModalWindow from './_modal-window';
 import DAO from '../dao';
 
 export default {
@@ -14,29 +14,34 @@ export default {
   data: function() {
     return {
       url: this.config ? this.config.url : null,
-      filter: this.config ? this.config.filter : null,
+      format: this.config ? this.config.format : null,
+      set: this.config ? this.config.set : null,
       tested: null,
       testing: false,
       error: null,
+      noResume: false,
     }
   },
   computed: {
     isValidConfig: function() {
-      return this.url && this.url.trim() !== "";
+      return this.url
+          && this.url.trim() !== ""
+          && this.format
+          && this.format.trim() !== "";
     },
   },
   methods: {
     save: function() {
       this.$emit("saving");
-      this.api.saveSyncConfig(this.datasetId, {url: this.url, filter: this.filter})
-          .then(data => this.$emit("saved-config", data))
-          .catch(error => this.$emit("error", "Error saving RS config", error));
+      this.api.saveConfig(this.datasetId, {url: this.url, format: this.format, set: this.set})
+          .then(data => this.$emit("saved-config", data, !this.noResume))
+          .catch(error => this.$emit("error", "Error saving OAI-PMH config", error));
     },
     testEndpoint: function() {
       this.testing = true;
-      this.api.testSyncConfig(this.datasetId, {url: this.url, filter: this.filter})
-          .then(() => {
-            this.tested = true;
+      this.api.testConfig(this.datasetId, {url: this.url, format: this.format, set: this.set})
+          .then( r => {
+            this.tested = !!r.name;
             this.error = null;
           })
           .catch(e => {
@@ -52,28 +57,43 @@ export default {
   watch: {
     config: function(newValue) {
       this.url = newValue ? newValue.url : null;
-      this.filter = newValue ? newValue.filter : null;
+      this.format = newValue ? newValue.format : null;
+      this.set = newValue ? newValue.set : null;
     }
   },
-}
+};
 </script>
 
 <template>
   <modal-window v-on:close="$emit('close')">
-    <template v-slot:title>ResourceSync Endpoint Configuration</template>
+    <template v-slot:title>OAI-PMH Endpoint Configuration</template>
 
     <div class="options-form">
       <div class="form-group">
         <label class="form-label" for="opt-endpoint-url">
-          ResourceSync capability list endpoint URL
+          OAI-PMH endpoint URL
         </label>
         <input class="form-control" id="opt-endpoint-url" type="url" v-model.trim="url" placeholder="(required)"/>
       </div>
       <div class="form-group">
-        <label class="form-label" for="opt-filter">
-          ResourceSync path filter RegEx
+        <label class="form-label" for="opt-format">
+          OAI-PMH metadata format
         </label>
-        <input class="form-control" id="opt-filter" type="text" v-model.trim="filter" placeholder="(optional)"/>
+        <input class="form-control" id="opt-format" type="text" v-model.trim="format" placeholder="(required)"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="opt-set">
+          OAI-PMH set
+        </label>
+        <input class="form-control" id="opt-set" type="text" v-model.trim="set"/>
+      </div>
+      <div class="form-group">
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" id="opt-no-resume" v-model="noResume"/>
+          <label class="form-check-label" for="opt-no-resume">
+            <strong>Do not</strong> resume from last harvest timestamp
+          </label>
+        </div>
       </div>
       <div id="endpoint-errors">
         <span v-if="tested === null">&nbsp;</span>
@@ -97,8 +117,9 @@ export default {
       </button>
       <button v-bind:disabled="!isValidConfig"
               v-on:click="save" type="button" class="btn btn-secondary">
-        <i v-bind:class="{'fa-clone': !waiting, 'fa-circle-o-notch fa-spin': waiting}" class="fa fa-fw"></i>
-        Sync Endpoint
+        <i v-if="!waiting" class="fa fa-fw fa-cloud-download"></i>
+        <i v-else class="fa fa-fw fa-spin fa-circle-o-notch"></i>
+        Harvest Endpoint
       </button>
     </template>
   </modal-window>

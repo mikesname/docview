@@ -1,13 +1,13 @@
 <script>
 
-import DatasetForm from './dataset-form';
-import OaipmhManager from './oaipmh-manager';
-import UploadManager from './upload-manager';
-import IngestManager from './ingest-manager';
-import RsManager from './rs-manager';
-import ConvertManager from './convert-manager';
+import DatasetForm from './_dataset-form';
+import OaipmhManager from './_oaipmh-manager';
+import UploadManager from './_upload-manager';
+import IngestManager from './_ingest-manager';
+import RsManager from './_rs-manager';
+import ConvertManager from './_convert-manager';
 
-import MixinUtil from './mixin-util';
+import MixinUtil from './_mixin-util';
 import DAO from '../dao';
 
 import _find from 'lodash/find';

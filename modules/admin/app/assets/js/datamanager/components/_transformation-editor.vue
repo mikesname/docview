@@ -1,15 +1,15 @@
 <script>
 
-import ModalWindow from './modal-window';
-import XsltEditor from './xslt-editor';
-import XqueryEditor from './xquery-editor';
-import FilePicker from './file-picker';
-import DragHandle from './drag-handle';
-import PanelFilePreview from './panel-file-preview';
-import PanelConvertPreview from './panel-convert-preview';
-import ModalAlert from './modal-alert';
+import ModalWindow from './_modal-window';
+import XsltEditor from './_xslt-editor';
+import XqueryEditor from './_xquery-editor';
+import FilePicker from './_file-picker';
+import DragHandle from './_drag-handle';
+import PanelFilePreview from './_panel-file-preview';
+import PanelConvertPreview from './_panel-convert-preview';
+import ModalAlert from './_modal-alert';
 
-import MixinTwoPanel from './mixin-two-panel';
+import MixinTwoPanel from './_mixin-two-panel';
 
 import _concat from 'lodash/concat';
 import _isEqual from 'lodash/isEqual';

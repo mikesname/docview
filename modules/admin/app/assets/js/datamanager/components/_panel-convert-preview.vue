@@ -1,6 +1,6 @@
 <script>
 
-import MixinPreviewPanel from './mixin-preview-panel';
+import MixinPreviewPanel from './_mixin-preview-panel';
 
 export default {
   mixins: [MixinPreviewPanel],

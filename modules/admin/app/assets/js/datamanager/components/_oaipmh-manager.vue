@@ -1,21 +1,21 @@
 <script>
 
-import FilterControl from './filter-control';
-import ValidateButton from './validate-button';
-import DeleteButton from './delete-button';
-import OaipmhConfigModal from './oaipmh-config-modal';
-import PanelFilePreview from './panel-file-preview';
-import FilesTable from './files-table';
-import DragHandle from './drag-handle';
-import ModalInfo from './modal-info';
-import LogWindow from './log-window';
+import FilterControl from './_filter-control';
+import ValidateButton from './_validate-button';
+import DeleteButton from './_delete-button';
+import OaipmhConfigModal from './_oaipmh-config-modal';
+import PanelFilePreview from './_panel-file-preview';
+import FilesTable from './_files-table';
+import DragHandle from './_drag-handle';
+import ModalInfo from './_modal-info';
+import LogWindow from './_log-window';
 
-import MixinStage from "./mixin-stage";
-import MixinTwoPanel from "./mixin-two-panel";
-import MixinPreview from './mixin-preview';
-import MixinValidator from "./mixin-validator";
-import MixinError from "./mixin-error";
-import MixinUtil from './mixin-util';
+import MixinStage from './_mixin-stage';
+import MixinTwoPanel from './_mixin-two-panel';
+import MixinPreview from './_mixin-preview';
+import MixinValidator from './_mixin-validator';
+import MixinError from './_mixin-error';
+import MixinUtil from './_mixin-util';
 
 import DAO from '../dao';
 

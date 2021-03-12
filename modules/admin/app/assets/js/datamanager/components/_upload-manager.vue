@@ -1,19 +1,19 @@
 <script>
 
-import FilterControl from './filter-control';
-import ValidateButton from './validate-button';
-import DeleteButton from './delete-button';
-import FilesTable from './files-table';
-import DragHandle from './drag-handle';
-import ModalInfo from './modal-info';
-import LogWindow from './log-window';
-import UploadProgress from './upload-progress';
-import PanelFilePreview from './panel-file-preview';
-import MixinStage from "./mixin-stage";
-import MixinTwoPanel from "./mixin-two-panel";
-import MixinPreview from "./mixin-preview";
-import MixinValidator from "./mixin-validator";
-import MixinError from "./mixin-error";
+import FilterControl from './_filter-control';
+import ValidateButton from './_validate-button';
+import DeleteButton from './_delete-button';
+import FilesTable from './_files-table';
+import DragHandle from './_drag-handle';
+import ModalInfo from './_modal-info';
+import LogWindow from './_log-window';
+import UploadProgress from './_upload-progress';
+import PanelFilePreview from './_panel-file-preview';
+import MixinStage from './_mixin-stage';
+import MixinTwoPanel from './_mixin-two-panel';
+import MixinPreview from './_mixin-preview';
+import MixinValidator from './_mixin-validator';
+import MixinError from './_mixin-error';
 
 import DAO from '../dao';
 
