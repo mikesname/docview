@@ -1,5 +1,12 @@
 <script>
-  export default {
+
+import _forEach from 'lodash/forEach';
+import _isUndefined from 'lodash/isUndefined';
+import _isEmpty from 'lodash/isEmpty';
+import _keys from 'lodash/keys';
+import _find from 'lodash/find';
+
+export default {
   props: {
     datasetId: String,
     fileStage: String,
@@ -15,11 +22,11 @@
   },
   methods: {
     handleValidationResults: function (errs) {
-      _.forEach(errs, item => {
+      _forEach(errs, item => {
         this.$set(this.validationResults, item.eTag, item.errors)
         this.$delete(this.validating, item.eTag);
       });
-      if (_.isUndefined(_.find(errs, (err) => err.errors.length > 0))) {
+      if (_isUndefined(_find(errs, (err) => err.errors.length > 0))) {
         this.validationLog.push('<span class="text-success">No errors found ✓</span>');
       } else {
         errs.forEach(item => {
@@ -36,8 +43,8 @@
       this.tab = 'validation';
       this.validationRunning = true;
       this.validationLog = [];
-      let allTags = _.isEmpty(tagToKey) ? this.files.map(f => f.eTag) : _.keys(tagToKey);
-      _.forEach(allTags, tag => this.$set(this.validating, tag, true));
+      let allTags = _isEmpty(tagToKey) ? this.files.map(f => f.eTag) : _keys(tagToKey);
+      _forEach(allTags, tag => this.$set(this.validating, tag, true));
 
       this.api.validateFiles(this.datasetId, this.fileStage, tagToKey)
         .then(errs => this.handleValidationResults(errs))

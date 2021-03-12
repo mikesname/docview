@@ -5,8 +5,13 @@ import CodeMirror from 'codemirror';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/xml/xml';
 
-
 import Vue from 'vue';
+
+import _find from 'lodash/find';
+import _isEqual from 'lodash/isEqual';
+import _isArray from 'lodash/isArray';
+import _fromPairs from 'lodash/fromPairs';
+
 
 export default {
   mixins: [MixinError],
@@ -44,6 +49,8 @@ export default {
     }
   },
   methods: {
+    _isArray,
+
     prettifyXml: function (xml) {
       let parser = new DOMParser();
       let xmlDoc = parser.parseFromString(xml, 'application/xml');
@@ -81,10 +88,10 @@ export default {
         this.updateErrors();
       } else {
         this.validating = true;
-        let tagToKey = _.fromPairs([[this.previewing.eTag, this.previewing.key]]);
+        let tagToKey = _fromPairs([[this.previewing.eTag, this.previewing.key]]);
         this.api.validateFiles(this.datasetId, this.fileStage, tagToKey)
             .then(errors => {
-              let e = _.find(errors, e => this.previewing.eTag === e.eTag);
+              let e = _find(errors, e => this.previewing.eTag === e.eTag);
               if (e) {
                 this.errors = e.errors;
                 this.updateErrors()
@@ -212,7 +219,7 @@ export default {
       }
     },
     previewing: function (newValue, oldValue) {
-      if (!_.isEqual(newValue, oldValue)) {
+      if (!_isEqual(newValue, oldValue)) {
         this.load();
       }
       if (newValue && oldValue && newValue.key !== oldValue.key) {
@@ -259,7 +266,7 @@ export default {
       <i class="fa fa-circle"></i>
     </div>
     <div class="valid-indicator" title="No errors detected"
-         v-if="!validating && previewing && (_.isArray(errors) && errors.length === 0)">
+         v-if="!validating && previewing && (_isArray(errors) && errors.length === 0)">
       <i class="fa fa-check"></i>
     </div>
     <div class="preview-loading-indicator" v-if="loading">

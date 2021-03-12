@@ -11,6 +11,10 @@ import ModalAlert from './modal-alert';
 
 import MixinTwoPanel from './mixin-two-panel';
 
+import _concat from 'lodash/concat';
+import _isEqual from 'lodash/isEqual';
+
+
 export default {
   components: {ModalWindow, XsltEditor, XqueryEditor, FilePicker, DragHandle, PanelFilePreview, PanelConvertPreview, ModalAlert},
   mixins: [MixinTwoPanel],
@@ -92,10 +96,10 @@ export default {
       let stage = [[this.data.bodyType, this.data.body]];
       return this.solo
           ? stage
-          : _.concat(this.inputPipeline, stage);
+          : _concat(this.inputPipeline, stage);
     },
     modified: function () {
-      return !_.isEqual(this.data, {
+      return !_isEqual(this.data, {
         name: this.name,
         generic: this.generic,
         bodyType: this.bodyType,

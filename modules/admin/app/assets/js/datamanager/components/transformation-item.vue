@@ -2,14 +2,12 @@
 export default {
   props: {
     item: Object,
-    enabled: Boolean,
   },
 }
 </script>
 
 <template>
-  <div v-bind:class="{'enabled': enabled}"
-       v-on:dblclick="$emit('edit')"
+  <div v-on:dblclick="$emit('edit')"
        class="list-group-item transformation-item list-group-item-action">
     <h4 class="transformation-item-name">
       {{item.name}}

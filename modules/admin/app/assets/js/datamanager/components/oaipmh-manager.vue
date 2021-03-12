@@ -118,7 +118,7 @@ export default {
       <delete-button
           v-bind:selected="selectedKeys.length"
           v-bind:disabled="files.length === 0 || harvestJobId !== null"
-          v-bind:active="!_.isEmpty(deleting)"
+          v-bind:active="deleting.length > 0"
           v-on:delete="deleteFiles(selectedKeys)"
       />
 

@@ -2,6 +2,8 @@
 
 import {prettyDate, humanFileSize} from "../common";
 import DAO from '../dao';
+import _fromPairs from 'lodash/fromPairs';
+
 
 export default {
   props: {
@@ -108,7 +110,7 @@ export default {
           </a>
         </td>
         <td v-if="validating !== null">
-          <a href="#" v-on:click.prevent.stop="$emit('validate-files', _.fromPairs([[file.eTag, file.key]]))">
+          <a href="#" v-on:click.prevent.stop="$emit('validate-files', _fromPairs([[file.eTag, file.key]]))">
             <i v-if="validating[file.eTag]" class="fa fa-fw fa-circle-o-notch fa-spin"></i>
             <i v-else-if="validationResults && validationResults[file.eTag]" class="fa fa-fw" v-bind:class="{
                     'fa-check text-success': validationResults[file.eTag].length === 0,

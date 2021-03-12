@@ -15,6 +15,11 @@ import MixinError from './mixin-error';
 import MixinUtil from './mixin-util';
 import DAO from '../dao';
 
+import _partition from 'lodash/partition';
+import _takeWhile from 'lodash/takeWhile';
+import _isEqual from 'lodash/isEqual';
+import _find from 'lodash/find';
+
 
 let initialConvertState = function(config) {
   return {
@@ -53,9 +58,9 @@ export default {
 
       return this.api.listDataTransformations()
           .then(available => {
-            let each = _.partition(available, item => !_.includes(this.mappings, item.id));
+            let each = _partition(available, item => !this.mappings.includes(item.id));
             this.available = each[0];
-            this.enabled = this.mappings.map(id => _.find(each[1], a => a.id === id));
+            this.enabled = this.mappings.map(id => _find(each[1], a => a.id === id));
           })
           .catch(error => this.showError("Unable to load transformations", error))
           .finally(() => this.loading = false);
@@ -66,7 +71,7 @@ export default {
       // pipeline to be the items ahead of this one in the enabled
       // list...
       this.previewPipeline = withPreviewPipeline
-          ? _.takeWhile(this.enabled, dt => dt.id !== item.id).map(dt => [dt.bodyType, dt.body])
+          ? _takeWhile(this.enabled, dt => dt.id !== item.id).map(dt => [dt.bodyType, dt.body])
           : [];
     },
     newTransformation: function() {
@@ -139,7 +144,7 @@ export default {
     },
     saveConfig: function() {
       let mappings = this.enabled.map(item => item.id);
-      if (!_.isEqual(mappings, this.mappings)) {
+      if (!_isEqual(mappings, this.mappings)) {
         console.log("saving enabled:", this.enabled)
         this.mappings = mappings;
         this.api.saveConvertConfig(this.datasetId, this.mappings)
@@ -147,7 +152,7 @@ export default {
       }
     },
     priorConversions: function(dt) {
-      return _.takeWhile(this.enabled, s => s.id !== dt.id);
+      return _takeWhile(this.enabled, s => s.id !== dt.id);
     }
   },
   watch: {
@@ -252,7 +257,6 @@ export default {
                   v-for="(dt, i) in available"
                   v-bind:item="dt"
                   v-bind:key="i"
-                  v-bind:enabled="_.includes(mappings, item => item.id)"
                   v-on:edit="editTransformation(dt, false)"
               />
             </draggable>
@@ -280,7 +284,6 @@ export default {
                   v-for="(dt, i) in enabled"
                   v-bind:item="dt"
                   v-bind:key="i"
-                  v-bind:enabled="_.includes(mappings, item => item.id)"
                   v-on:edit="editTransformation(dt, true)"
               />
             </draggable>

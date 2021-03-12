@@ -2,6 +2,8 @@
 
 import FilePickerSuggestion from './file-picker-suggestion';
 
+import _debounce from 'lodash/debounce';
+
 export default {
   components: {FilePickerSuggestion},
   props: {
@@ -36,7 +38,7 @@ export default {
             })
             .finally(() => this.loading = false);
       }
-      _.debounce(list, 300)();
+      _debounce(list, 300)();
     },
     selectPrev: function () {
       this.selectedIdx = Math.max(-1, this.selectedIdx - 1);

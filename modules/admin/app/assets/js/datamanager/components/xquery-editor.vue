@@ -1,5 +1,8 @@
 <script>
 
+import _padStart from 'lodash/padStart';
+import _clone from 'lodash/clone';
+import _concat from 'lodash/concat';
 
 export default {
   props: {
@@ -12,13 +15,15 @@ export default {
     }
   },
   methods: {
+    _padStart,
+
     update: function() {
       this.$emit('input', this.serialize(this.mappings));
       // Return a promise when the DOM is ready...
       return Vue.nextTick();
     },
     focus: function(row, col) {
-      let elem = this.$refs[_.padStart(row, 4, 0) + '-' + col];
+      let elem = this.$refs[_padStart(row, 4, 0) + '-' + col];
       if (elem && elem[0]) {
         elem[0].focus();
       }
@@ -35,7 +40,7 @@ export default {
           .then(() => this.focus(this.selected, 0));
     },
     duplicate: function(i) {
-      let m = _.clone(this.mappings[i]);
+      let m = _clone(this.mappings[i]);
       this.selected = i + 1;
       this.mappings.splice(this.selected, 0, m);
       this.update();
@@ -83,7 +88,7 @@ export default {
     serialize: function(mappings) {
       let header = ["target-path\ttarget-node\tsource-node\tvalue"]
       let rows = mappings.map(m => m.join("\t"))
-      let all = _.concat(header, rows)
+      let all = _concat(header, rows)
       return all.join("\n");
     },
   },
@@ -104,8 +109,8 @@ export default {
           <input
               v-for="col in [0, 1, 2, 3]"
               type="text"
-              v-bind:ref="_.padStart(row, 4, 0) + '-' + col"
-              v-bind:key="_.padStart(row, 4, 0) + '-' + col"
+              v-bind:ref="_padStart(row, 4, 0) + '-' + col"
+              v-bind:key="_padStart(row, 4, 0) + '-' + col"
               v-bind:class="{'selected': selected === row}"
               v-model="mappings[row][col]"
               @change="update"

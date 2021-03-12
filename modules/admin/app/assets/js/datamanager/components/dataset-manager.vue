@@ -10,6 +10,10 @@ import ConvertManager from './convert-manager';
 import MixinUtil from './mixin-util';
 import DAO from '../dao';
 
+import _find from 'lodash/find';
+import _merge from 'lodash/merge';
+import _omit from 'lodash/omit';
+
 export default {
   components: {DatasetForm, OaipmhManager, UploadManager, IngestManager, RsManager, ConvertManager},
   mixins: [MixinUtil],
@@ -37,7 +41,7 @@ export default {
     switchTab: function(tab) {
       this.tab = tab;
       history.pushState(
-          _.merge(this.queryParams(window.location.search), {'tab': tab}),
+          _merge(this.queryParams(window.location.search), {'tab': tab}),
           document.title,
           this.setQueryParam(window.location.search, 'tab', tab));
     },
@@ -48,14 +52,14 @@ export default {
       }
       this.dataset = ds;
       history.pushState(
-          _.merge(this.queryParams(window.location.search), {'ds': ds.id}),
+          _merge(this.queryParams(window.location.search), {'ds': ds.id}),
           document.title,
           this.setQueryParam(window.location.search, 'ds', ds.id));
     },
     closeDataset: function() {
       this.dataset = null;
       history.pushState(
-          _.omit(this.queryParams(window.location.search), 'ds', 'tab'),
+          _omit(this.queryParams(window.location.search), 'ds', 'tab'),
           document.title,
           window.location.pathname
           + this.removeQueryParam(window.location.search, ['ds', 'tab']));
@@ -93,7 +97,7 @@ export default {
         this.tab = this.initTab;
       }
       if (event.state && event.state.ds) {
-        this.dataset = _.find(this.datasets, d => d.id === event.state.ds);
+        this.dataset = _find(this.datasets, d => d.id === event.state.ds);
       } else {
         this.dataset = null;
       }
@@ -107,7 +111,7 @@ export default {
     this.loadDatasets().then(() => {
       let qsDs = this.getQueryParam(window.location.search, "ds");
       if (qsDs) {
-        this.selectDataset(_.find(this.datasets, d => d.id === qsDs));
+        this.selectDataset(_find(this.datasets, d => d.id === qsDs));
       }
     });
   },

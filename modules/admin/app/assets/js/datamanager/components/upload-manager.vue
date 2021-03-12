@@ -17,6 +17,7 @@ import MixinError from "./mixin-error";
 
 import DAO from '../dao';
 
+import _findIndex from 'lodash/findIndex';
 
 /**
  * Custom Error class
@@ -79,12 +80,12 @@ export default {
     finishUpload: function (fileSpec) {
       this.setUploadProgress(fileSpec, 100);
       setTimeout(() => {
-        let i = _.findIndex(this.uploading, s => s.spec.name === fileSpec.name);
+        let i = _findIndex(this.uploading, s => s.spec.name === fileSpec.name);
         this.uploading.splice(i, 1)
       }, 1000);
     },
     setUploadProgress: function (fileSpec, percent) {
-      let i = _.findIndex(this.uploading, s => s.spec.name === fileSpec.name);
+      let i = _findIndex(this.uploading, s => s.spec.name === fileSpec.name);
       if (i > -1) {
         this.uploading[i].progress = Math.min(100, percent);
         return true;
@@ -102,7 +103,7 @@ export default {
     },
     uploadFile: function (file) {
       // Check we're still in the queue and have not been cancelled...
-      if (_.findIndex(this.uploading, f => f.spec.name === file.name) === -1) {
+      if (_findIndex(this.uploading, f => f.spec.name === file.name) === -1) {
         return Promise.reject(new UploadCancelled(file.name));
       }
 
@@ -197,7 +198,7 @@ export default {
       <delete-button
           v-bind:selected="selectedKeys.length"
           v-bind:disabled="files.length === 0 || uploading.length > 0"
-          v-bind:active="!_.isEmpty(deleting)"
+          v-bind:active="deleting.length > 0"
           v-on:delete="deleteFiles(selectedKeys)"
       />
 

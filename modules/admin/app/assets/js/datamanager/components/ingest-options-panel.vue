@@ -3,6 +3,10 @@
 import ModalWindow from './modal-window';
 import DAO from '../dao';
 
+import _pick from 'lodash/pick';
+import _size from 'lodash/size';
+
+
 export default {
   components: {ModalWindow},
   props: {
@@ -51,7 +55,7 @@ export default {
         this.api.uploadHandle(
             this.datasetId,
             this.config.config,
-            _.pick(file, ['name', 'type', 'size'])
+            _pick(file, ['name', 'type', 'size'])
         )
             .then(data => this.api
                 .uploadFile(data.presignedUrl, file, () => true)
@@ -85,7 +89,7 @@ export default {
       return this.logMessage && this.logMessage.trim() !== "";
     },
     hasProps: function() {
-      return _.size(this.props) > 0;
+      return _size(this.props) > 0;
     }
   },
 };

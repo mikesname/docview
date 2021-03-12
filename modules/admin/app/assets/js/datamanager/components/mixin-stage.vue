@@ -1,5 +1,11 @@
 <script>
 
+import _debounce from 'lodash/debounce';
+import _forIn from 'lodash/forIn';
+import _fromPairs from 'lodash/fromPairs';
+import _isEmpty from 'lodash/isEmpty';
+
+
 let initialStageState = function() {
   return {
     loaded: false,
@@ -34,7 +40,7 @@ export default {
       return Object.keys(this.selected);
     },
     selectedTags: function() {
-      return _.fromPairs(Object.values(this.selected).map(f => [f.eTag, f.key]));
+      return _fromPairs(Object.values(this.selected).map(f => [f.eTag, f.key]));
     }
   },
   methods: {
@@ -53,9 +59,9 @@ export default {
           return r;
         });
       };
-      return _.debounce(func, 300)();
+      return _debounce(func, 300)();
     },
-    refresh: _.debounce(function() {
+    refresh: _debounce(function() {
       return this.load();
     }, 500),
     load: function () {
@@ -84,7 +90,7 @@ export default {
       keys.forEach(key => this.$set(this.downloading, key, true));
       this.api.fileUrls(this.datasetId, this.fileStage, keys)
         .then(urls => {
-          _.forIn(urls, (url, fileName) => {
+          _forIn(urls, (url, fileName) => {
             window.open(url, '_blank');
             this.$delete(this.downloading, fileName);
           });
@@ -93,10 +99,10 @@ export default {
         .finally(() => this.downloading = {});
     },
     deleteFiles: function (keys) {
-      if (_.isEmpty(keys) || keys.includes(this.previewing)) {
+      if (_isEmpty(keys) || keys.includes(this.previewing)) {
         this.previewing = null;
       }
-      let dkeys = _.isEmpty(keys) ? this.files.map(f => f.key) : keys;
+      let dkeys = _isEmpty(keys) ? this.files.map(f => f.key) : keys;
       dkeys.forEach(key => this.$set(this.deleting, key, true));
       this.api.deleteFiles(this.datasetId, this.fileStage, keys)
         .then(() => {

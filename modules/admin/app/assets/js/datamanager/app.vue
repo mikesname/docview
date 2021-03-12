@@ -1,14 +1,15 @@
-
 <script>
+
+import DatasetManager from './components/dataset-manager';
+import MixinUtil from './components/mixin-util';
+import DAO from "./dao";
+
+
 if (typeof window !== 'undefined') {
   // Prevent default drag/drop action...
   window.addEventListener("dragover", e => e.preventDefault(), false);
   window.addEventListener("drop", e => e.preventDefault(), false);
 }
-
-import DatasetManager from './components/dataset-manager';
-import MixinUtil from './components/mixin-util';
-import DAO from "./dao";
 
 export default {
   components: {DatasetManager},

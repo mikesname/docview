@@ -81,7 +81,6 @@
         </script>
 
         <script src="@controllers.admin.routes.AdminAssets.versioned("js/lib/vue.js")"></script>
-        <script src="@controllers.admin.routes.AdminAssets.versioned("js/lib/lodash.js")"></script>
         <script src="@controllers.portal.routes.PortalData.localeData()"></script>
 
         <div id="flex-wrapper">
@@ -97,7 +96,6 @@
 
       <script src="@controllers.admin.routes.AdminAssets.versioned("js/datamanager/app.js")"></script>
       <script>
-        Vue.set(Vue.prototype, '_', _);
         var app = new Vue({
           el: '#vue-app',
           render: function(html) {

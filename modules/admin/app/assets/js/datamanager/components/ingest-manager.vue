@@ -18,6 +18,10 @@ import MixinStage from './mixin-stage';
 import MixinUtil from './mixin-util';
 import DAO from '../dao';
 
+import _fromPairs from 'lodash/fromPairs';
+import _startsWith from 'lodash/startsWith';
+import _last from 'lodash/last';
+
 
 export default {
   components: {FilterControl, FilesTable, LogWindow, DragHandle, ModalInfo, PanelFilePreview, ValidateButton, DeleteButton, IngestOptionsPanel},
@@ -46,7 +50,7 @@ export default {
         if (msg.data.error) {
           this.log.push(msg.data.error);
         } else if (msg.data.msg) {
-          if (this.log && _.startsWith(_.last(this.log), "Ingesting...") && _.startsWith(msg.data.msg, "Ingesting...")) {
+          if (this.log && _startsWith(_last(this.log), "Ingesting...") && _startsWith(msg.data.msg, "Ingesting...")) {
             this.log.splice(this.log.length - 1, 1, msg.data.msg);
           } else {
             this.log.push(msg.data.msg);
@@ -132,7 +136,7 @@ export default {
       <delete-button
           v-bind:selected="selectedKeys.length"
           v-bind:disabled="files.length === 0 || ingestJobId !== null"
-          v-bind:active="!_.isEmpty(deleting)"
+          v-bind:active="deleting.length > 0"
           v-on:delete="deleteFiles(selectedKeys)"
       />
 
