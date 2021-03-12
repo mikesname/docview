@@ -8,6 +8,7 @@ if (typeof window !== 'undefined') {
 
 import DatasetManager from './components/dataset-manager';
 import MixinUtil from './components/mixin-util';
+import DAO from "./dao";
 
 export default {
   components: {DatasetManager},

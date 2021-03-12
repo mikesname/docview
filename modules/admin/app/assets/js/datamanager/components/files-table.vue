@@ -1,4 +1,8 @@
 <script>
+
+import {prettyDate, humanFileSize} from "../common";
+import DAO from '../dao';
+
 export default {
   props: {
     api: DAO,
@@ -57,7 +61,11 @@ export default {
       }
     },
   },
-
+  filters: {
+    prettyDate,
+    humanFileSize,
+    decodeURI
+  }
 };
 </script>
 
@@ -87,7 +95,7 @@ export default {
                  v-on:input.stop.prevent.self="toggleItem(file, !selected[file.key])"
                  v-on:click="$event.stopPropagation()">
         </td>
-        <td>{{file.key|decodeUri}}</td>
+        <td>{{file.key|decodeURI}}</td>
         <td v-bind:title="file.lastModified">{{file.lastModified | prettyDate}}</td>
         <td>{{file.size | humanFileSize(true)}}</td>
 

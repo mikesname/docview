@@ -15,6 +15,9 @@ import MixinPreview from "./mixin-preview";
 import MixinValidator from "./mixin-validator";
 import MixinError from "./mixin-error";
 
+import DAO from '../dao';
+
+
 /**
  * Custom Error class
  */

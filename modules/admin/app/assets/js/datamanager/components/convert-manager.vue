@@ -10,10 +10,10 @@ import DragHandle from './drag-handle';
 import PanelConvertPreview from './panel-convert-preview';
 
 import MixinTwoPanel from './mixin-two-panel';
-import MixinPreviewPanel from './mixin-preview-panel';
 import MixinValidator from './mixin-validator';
 import MixinError from './mixin-error';
 import MixinUtil from './mixin-util';
+import DAO from '../dao';
 
 
 let initialConvertState = function(config) {

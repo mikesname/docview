@@ -1,4 +1,5 @@
-"use strict";
+
+import axios from "axios";
 
 /**
  * A data access object encapsulating the management API endpoints.
@@ -205,3 +206,5 @@ let DAO = class {
     return this.call(this.service.ImportDatasets.delete(this.repoId, ds));
   }
 };
+
+export default DAO;

@@ -39,6 +39,8 @@ export default {
         this.setQueryParam(window.location.search, key, value)
       );
     }
-  }
+  },
+
+  filters: { decodeURI }
 }
 </script>

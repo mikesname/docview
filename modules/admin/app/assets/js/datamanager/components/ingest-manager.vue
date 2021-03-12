@@ -16,6 +16,7 @@ import MixinError from './mixin-error';
 import MixinPreview from './mixin-preview';
 import MixinStage from './mixin-stage';
 import MixinUtil from './mixin-util';
+import DAO from '../dao';
 
 
 export default {
@@ -200,7 +201,7 @@ export default {
             <a href="#" class="nav-link" v-bind:class="{'active': tab === 'preview'}"
                v-on:click.prevent="tab = 'preview'">
               File Preview
-              <template v-if="previewing"> - {{previewing.key|decodeUri}}</template>
+              <template v-if="previewing"> - {{previewing.key|decodeURI}}</template>
             </a>
           </li>
           <li class="nav-item">

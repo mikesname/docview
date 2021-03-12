@@ -8,6 +8,7 @@ import RsManager from './rs-manager';
 import ConvertManager from './convert-manager';
 
 import MixinUtil from './mixin-util';
+import DAO from '../dao';
 
 export default {
   components: {DatasetForm, OaipmhManager, UploadManager, IngestManager, RsManager, ConvertManager},
@@ -72,6 +73,14 @@ export default {
     reloadDatasets: function(ds) {
       this.loadDatasets().then(() => this.selectDataset(ds));
     },
+    stageName: function(code) {
+      switch (code) {
+        case "oaipmh": return "Harvesting";
+        case "upload": return "Uploads";
+        case "rs": return "ResourceSync";
+        default: return code;
+      }
+    }
   },
   created() {
     if (!this.config.versioned) {
@@ -140,7 +149,7 @@ export default {
         <div class="dataset-manager-list">
           <div v-for="ds in datasets" v-on:click.prevent="selectDataset(ds)" class="dataset-manager-item">
             <div class="badge badge-primary" v-bind:class="'badge-' + ds.src">
-              {{ds.src|stageName(config)}}
+              {{stageName(ds.src)}}
               <span v-if="ds.id in stats">({{stats[ds.id]}})</span>
             </div>
             <h3>{{ds.name}}</h3>

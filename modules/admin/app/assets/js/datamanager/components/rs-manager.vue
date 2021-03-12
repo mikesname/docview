@@ -3,24 +3,25 @@
 import FilterControl from './filter-control';
 import ValidateButton from './validate-button';
 import DeleteButton from './delete-button';
-import OaipmhConfigModal from './oaipmh-config-modal';
-import PanelFilePreview from './panel-file-preview';
 import FilesTable from './files-table';
 import DragHandle from './drag-handle';
+import PanelFilePreview from './panel-file-preview';
 import ModalInfo from './modal-info';
 import LogWindow from './log-window';
+import RsConfigModal from './rs-config-modal';
 
-import MixinStage from "./mixin-stage";
-import MixinTwoPanel from "./mixin-two-panel";
+import MixinTwoPanel from './mixin-two-panel';
+import MixinValidator from './mixin-validator';
 import MixinPreview from './mixin-preview';
-import MixinValidator from "./mixin-validator";
-import MixinError from "./mixin-error";
+import MixinError from './mixin-error';
+import MixinStage from './mixin-stage';
 import MixinUtil from './mixin-util';
 
+import DAO from '../dao';
 
 export default {
-  components: {FilterControl, FilesTable, DeleteButton, ValidateButton, PanelFilePreview, OaipmhConfigModal, DragHandle, ModalInfo, LogWindow},
-  mixins: [MixinStage, MixinTwoPanel, MixinValidator, MixinError, MixinPreview, MixinUtil],
+  components: {FilterControl, FilesTable, LogWindow, DragHandle, ModalInfo, PanelFilePreview, ValidateButton, DeleteButton, RsConfigModal},
+  mixins: [MixinStage, MixinTwoPanel, MixinPreview, MixinValidator, MixinError, MixinUtil],
   props: {
     fileStage: String,
     config: Object,
@@ -28,39 +29,38 @@ export default {
   },
   data: function () {
     return {
-      harvestJobId: null,
+      syncJobId: null,
       showOptions: false,
-      opts: null,
+      syncConfig: null,
       waiting: false,
     }
   },
   methods: {
-    doHarvest: function(opts, fromLast) {
+    doSync: function (opts) {
       this.waiting = true;
 
-      // Save opts for the next time we open the config UI
-      this.opts = opts;
+      this.syncConfig = opts;
 
-      this.api.harvest(this.datasetId, opts, fromLast)
+      this.api.sync(this.datasetId, opts)
           .then(data => {
             this.showOptions = false;
-            this.harvestJobId = data.jobId;
-            this.monitorHarvest(data.url, data.jobId);
+            this.syncJobId = data.jobId;
+            this.monitorSync(data.url, data.jobId);
           })
-          .catch(error => this.showError("Error running harvest", error))
+          .catch(error => this.showError("Error running sync", error))
           .finally(() => this.waiting = false);
     },
-    cancelHarvest: function() {
-      if (this.harvestJobId) {
-        this.api.cancelHarvest(this.harvestJobId).then(r => {
+    cancelSync: function () {
+      if (this.syncJobId) {
+        this.api.cancelSync(this.syncJobId).then(r => {
           if (r.ok) {
-            this.harvestJobId = null;
+            this.syncJobId = null;
           }
         });
       }
     },
-    monitorHarvest: function (url, jobId) {
-      this.tab = 'harvest';
+    monitorSync: function (url, jobId) {
+      this.tab = 'sync';
 
       let worker = new Worker(this.config.previewLoader);
       worker.onmessage = msg => {
@@ -73,34 +73,36 @@ export default {
         if (msg.data.done || msg.data.error) {
           worker.terminate();
 
-          this.harvestJobId = null;
-          this.removeUrlState('harvest-job-id');
+          this.syncJobId = null;
+          this.removeUrlState('sync-job-id');
         }
       };
       worker.postMessage({type: 'websocket', url: url, DONE: DONE_MSG, ERR: ERR_MSG});
-      this.replaceUrlState('harvest-job-id', jobId);
+      this.replaceUrlState('sync-job-id', jobId);
     },
-    resumeMonitor: function() {
-      let jobId = this.getQueryParam(window.location.search, "harvest-job-id");
+    resumeMonitor: function () {
+      let jobId = this.getQueryParam(window.location.search, "sync-job-id");
       if (jobId) {
-        this.harvestJobId = jobId;
-        this.monitorHarvest(this.config.monitorUrl(jobId), jobId);
+        this.syncJobId = jobId;
+        this.monitorSync(this.config.monitorUrl(jobId), jobId);
       }
     },
-    loadConfig: function() {
-      this.api.getConfig(this.datasetId)
-          .then(data => this.opts = data);
+    loadConfig: function () {
+      this.api.getSyncConfig(this.datasetId)
+          .then(data => {
+            this.syncConfig = data;
+            console.log("Loaded", data);
+          });
     },
   },
   created: function () {
     this.loadConfig();
     this.resumeMonitor();
-  },
-};
+  }
+}
 </script>
-
 <template>
-  <div id="oaipmh-manager-container" class="stage-manager-container">
+  <div id="rs-manager-container" class="stage-manager-container">
     <div class="actions-bar">
       <filter-control v-bind:filter="filter"
                       v-on:filter="filterFiles"
@@ -108,43 +110,43 @@ export default {
 
       <validate-button
           v-bind:selected="selectedKeys.length"
-          v-bind:disabled="files.length === 0 || harvestJobId !== null"
+          v-bind:disabled="files.length === 0 || syncJobId !== null"
           v-bind:active="validationRunning"
-          v-on:validate="validateFiles(selectedTags)"
+          v-on:validate="selectedKeys.length ? validateFiles(selectedKeys) : validateAll()"
       />
 
       <delete-button
           v-bind:selected="selectedKeys.length"
-          v-bind:disabled="files.length === 0 || harvestJobId !== null"
+          v-bind:disabled="files.length === 0 || syncJobId !== null"
           v-bind:active="!_.isEmpty(deleting)"
           v-on:delete="deleteFiles(selectedKeys)"
       />
 
-      <button v-if="!harvestJobId" class="btn btn-sm btn-default"
+      <button v-if="!syncJobId" class="btn btn-sm btn-default"
               v-on:click.prevent="showOptions = !showOptions">
-        <i class="fa fa-fw fa-cloud-download"/>
-        Harvest Files...
+        <i class="fa fa-fw fa-clone"/>
+        Sync Files...
       </button>
-      <button v-else class="btn btn-sm btn-outline-danger" v-on:click.prevent="cancelHarvest">
+      <button v-else class="btn btn-sm btn-outline-danger" v-on:click.prevent="cancelSync">
         <i class="fa fa-fw fa-spin fa-circle-o-notch"></i>
-        Cancel Harvest
+        Cancel Sync
       </button>
 
-      <oaipmh-config-modal
+      <rs-config-modal
           v-if="showOptions"
           v-bind:waiting="waiting"
           v-bind:dataset-id="datasetId"
-          v-bind:config="opts"
+          v-bind:config="syncConfig"
           v-bind:api="api"
           v-on:saving="waiting = true"
-          v-on:saved-config="doHarvest"
+          v-on:saved-config="doSync"
           v-on:error="showError"
           v-on:close="showOptions = false"/>
 
       <modal-info v-if="fileInfo !== null" v-bind:file-info="fileInfo" v-on:close="fileInfo = null"/>
     </div>
 
-    <div id="oaipmh-panel-container" class="panel-container">
+    <div id="rs-panel-container" class="panel-container">
       <div class="top-panel">
         <files-table
             v-bind:api="api"
@@ -174,13 +176,13 @@ export default {
         />
       </div>
 
-      <div id="oaipmh-status-panels" class="bottom-panel">
+      <div id="rs-status-panels" class="bottom-panel">
         <ul class="status-panel-tabs nav nav-tabs">
           <li class="nav-item">
             <a href="#" class="nav-link" v-bind:class="{'active': tab === 'preview'}"
                v-on:click.prevent="tab = 'preview'">
               File Preview
-              <template v-if="previewing"> - {{ previewing.key|decodeUri }}</template>
+              <template v-if="previewing"> - {{previewing.key|decodeURI}}</template>
             </a>
           </li>
           <li class="nav-item">
@@ -190,15 +192,15 @@ export default {
             </a>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link" v-bind:class="{'active': tab === 'harvest'}"
-               v-on:click.prevent="tab = 'harvest'">
-              Harvest Log
+            <a href="#" class="nav-link" v-bind:class="{'active': tab === 'sync'}"
+               v-on:click.prevent="tab = 'sync'">
+              Sync Log
             </a>
           </li>
           <li>
             <drag-handle
                 v-bind:ns="fileStage"
-                v-bind:p2="$root.$el.querySelector('#oaipmh-status-panels')"
+                v-bind:p2="$root.$el.querySelector('#rs-status-panels')"
                 v-bind:container="$root.$el.querySelector('#oaipmh-panel-container')"
                 v-on:resize="setPanelSize"
             />
@@ -223,14 +225,14 @@ export default {
           </div>
           <div class="status-panel log-container" v-show="tab === 'validation'">
             <log-window v-bind:log="validationLog" v-if="validationLog.length > 0"/>
-            <div class="panel-placeholder" v-else>
+            <div  class="panel-placeholder" v-else>
               Validation log output will show here.
             </div>
           </div>
-          <div class="status-panel log-container" v-show="tab === 'harvest'">
+          <div class="status-panel log-container" v-show="tab === 'sync'">
             <log-window v-bind:log="log" v-if="log.length > 0"/>
             <div class="panel-placeholder" v-else>
-              Harvest log output will show here.
+              Sync log output will show here.
             </div>
           </div>
         </div>
@@ -238,4 +240,3 @@ export default {
     </div>
   </div>
 </template>
-

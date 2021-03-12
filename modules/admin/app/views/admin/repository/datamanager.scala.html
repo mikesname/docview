@@ -69,7 +69,7 @@
                     input: "@FileStage.Input",
                     output: "@FileStage.Output",
                     config: "@FileStage.Config",
-                    previewLoader: "@controllers.admin.routes.AdminAssets.versioned("js/datamanager.worker.js")",
+                    previewLoader: "@controllers.admin.routes.AdminAssets.versioned("js/datamanager/worker.js")",
                     monitorUrl: jobId => dataManagerRoutes.controllers.admin.Tasks.taskMonitorWS(jobId)
                                 .absoluteURL(location.protocol === "https:")
                                 .replace(/^http/, "ws"),
@@ -81,11 +81,7 @@
         </script>
 
         <script src="@controllers.admin.routes.AdminAssets.versioned("js/lib/vue.js")"></script>
-@*        <script src="@controllers.admin.routes.AdminAssets.versioned("js/lib/Sortable.js")"></script>*@
-@*        <script src="@controllers.admin.routes.AdminAssets.versioned("js/lib/vuedraggable.umd.js")"></script>*@
-        <script src="@controllers.admin.routes.AdminAssets.versioned("js/lib/axios.js")"></script>
         <script src="@controllers.admin.routes.AdminAssets.versioned("js/lib/lodash.js")"></script>
-        <script src="@controllers.admin.routes.AdminAssets.versioned("js/lib/luxon.js")"></script>
         <script src="@controllers.portal.routes.PortalData.localeData()"></script>
 
         <div id="flex-wrapper">
@@ -102,15 +98,13 @@
       <script src="@controllers.portal.routes.PortalAssets.versioned("js/lib/codemirror/xml.js")"></script>
       <link rel="stylesheet" property="stylesheet" href="@controllers.portal.routes.PortalAssets.versioned("js/lib/codemirror/codemirror.css")">
 
-      <script src="@controllers.admin.routes.AdminAssets.versioned("js/datamanager-dao.js")"></script>
-      <script src="@controllers.admin.routes.AdminAssets.versioned("js/datamanager-common.js")"></script>
-      <script src="@controllers.admin.routes.AdminAssets.versioned("js/datamanager-app.js")"></script>
+      <script src="@controllers.admin.routes.AdminAssets.versioned("js/datamanager/app.js")"></script>
       <script>
         Vue.set(Vue.prototype, '_', _);
         var app = new Vue({
           el: '#vue-app',
           render: function(html) {
-              return html(DatamanagerApp.default);
+              return html(App.default);
           }
         });
       </script>

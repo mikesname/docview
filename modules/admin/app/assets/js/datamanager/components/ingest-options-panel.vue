@@ -1,6 +1,7 @@
 <script>
 
 import ModalWindow from './modal-window';
+import DAO from '../dao';
 
 export default {
   components: {ModalWindow},

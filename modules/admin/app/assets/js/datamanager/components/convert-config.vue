@@ -2,6 +2,7 @@
 
 import ModalWindow from './modal-window';
 import FilePicker from './file-picker';
+import DAO from '../dao';
 
 export default {
   components: {FilePicker, ModalWindow},

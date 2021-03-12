@@ -1,5 +1,6 @@
 <script>
 
+import {prettyDate, humanFileSize} from "../common";
 import ModalWindow from './modal-window';
 
 export default {
@@ -7,12 +8,13 @@ export default {
   props: {
     fileInfo: Object
   },
+  filters: { prettyDate, humanFileSize, decodeURI }
 };
 </script>
 
 <template>
   <modal-window v-on:close="$emit('close')">
-    <template v-slot:title>{{fileInfo.meta.key|decodeUri}}</template>
+    <template v-slot:title>{{fileInfo.meta.key|decodeURI}}</template>
     <dl>
       <dt>File size:</dt>
       <dd>{{fileInfo.meta.size|humanFileSize}}</dd>

@@ -4,12 +4,13 @@ export default {
     selected: Boolean,
     item: Object,
   },
+  filters: { decodeURI }
 };
 </script>
 
 <template>
   <div @click="$emit('selected', item)" class="file-picker-suggestion" v-bind:class="{'selected': selected}">
-    {{ item.key|decodeUri }}
+    {{ item.key|decodeURI }}
   </div>
 </template>
 
