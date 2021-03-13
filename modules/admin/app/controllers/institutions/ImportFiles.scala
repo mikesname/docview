@@ -18,6 +18,7 @@ import services.datasets.ImportDatasetService
 import services.ingest._
 import services.storage.FileStorage
 
+import java.net.URI
 import javax.inject._
 import scala.concurrent.Future
 import scala.concurrent.duration._
@@ -83,7 +84,7 @@ case class ImportFiles @Inject()(
 
   def fileUrls(id: String, ds: String, stage: FileStage.Value): Action[Seq[String]] = EditAction(id).apply(parse.json[Seq[String]]) { implicit request =>
     val keys = request.body.map(path => s"${prefix(id, ds, stage)}$path")
-    val result = keys.map(key => key.replace(prefix(id, ds, stage), "") -> storage.uri(key)).toMap
+    val result: Map[String, URI] = keys.map(key => key.replace(prefix(id, ds, stage), "") -> storage.uri(key)).toMap
     Ok(Json.toJson(result))
   }
 

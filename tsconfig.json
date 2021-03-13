@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "diagnostics": true,
+    "target": "esnext",
+    "module": "esnext",
+    "allowJs": true,
+    "jsx": "preserve",
+    "moduleResolution": "node"
+  },
+  "exclude": ["node_modules"],
+  "include": ["modules/admin/app/assets/js/datamanager"]
+}

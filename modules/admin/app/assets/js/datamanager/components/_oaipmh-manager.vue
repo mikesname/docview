@@ -79,7 +79,7 @@ export default {
           this.removeUrlState('harvest-job-id');
         }
       };
-      worker.postMessage({type: 'websocket', url: url, DONE: DONE_MSG, ERR: ERR_MSG});
+      worker.postMessage({type: 'websocket', url: url, DONE: DAO.DONE_MSG, ERR: DAO.ERR_MSG});
       this.replaceUrlState('harvest-job-id', jobId);
     },
     resumeMonitor: function() {

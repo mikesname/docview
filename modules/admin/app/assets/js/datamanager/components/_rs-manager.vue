@@ -19,6 +19,7 @@ import MixinUtil from './_mixin-util';
 
 import DAO from '../dao';
 
+
 export default {
   components: {FilterControl, FilesTable, LogWindow, DragHandle, ModalInfo, PanelFilePreview, ValidateButton, DeleteButton, RsConfigModal},
   mixins: [MixinStage, MixinTwoPanel, MixinPreview, MixinValidator, MixinError, MixinUtil],
@@ -77,7 +78,7 @@ export default {
           this.removeUrlState('sync-job-id');
         }
       };
-      worker.postMessage({type: 'websocket', url: url, DONE: DONE_MSG, ERR: ERR_MSG});
+      worker.postMessage({type: 'websocket', url: url, DONE: DAO.DONE_MSG, ERR: DAO.ERR_MSG});
       this.replaceUrlState('sync-job-id', jobId);
     },
     resumeMonitor: function () {

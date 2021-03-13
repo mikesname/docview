@@ -1,4 +1,6 @@
-<script>
+<script lang="ts">
+
+import Vue from 'vue';
 
 import _padStart from 'lodash/padStart';
 import _clone from 'lodash/clone';
@@ -8,7 +10,7 @@ export default {
   props: {
     value: String,
   },
-  data: function() {
+  data: function(): Object {
     return {
       mappings: this.deserialize(this.value),
       selected: -1,
@@ -17,18 +19,18 @@ export default {
   methods: {
     _padStart,
 
-    update: function() {
+    update: function(): Promise<void> {
       this.$emit('input', this.serialize(this.mappings));
       // Return a promise when the DOM is ready...
       return Vue.nextTick();
     },
-    focus: function(row, col) {
+    focus: function(row, col): void {
       let elem = this.$refs[_padStart(row, 4, 0) + '-' + col];
       if (elem && elem[0]) {
         elem[0].focus();
       }
     },
-    add: function() {
+    add: function(): void {
       // Insert a new item below the current selection, or
       // at the end if nothing is selected.
       let point = this.selected === -1
@@ -39,18 +41,18 @@ export default {
       this.update()
           .then(() => this.focus(this.selected, 0));
     },
-    duplicate: function(i) {
+    duplicate: function(i): void {
       let m = _clone(this.mappings[i]);
       this.selected = i + 1;
       this.mappings.splice(this.selected, 0, m);
       this.update();
     },
-    remove: function(i) {
+    remove: function(i): void {
       this.mappings.splice(i, 1);
       this.selected = Math.min(i, this.mappings.length - 1);
       this.update();
     },
-    moveUp: function(i) {
+    moveUp: function(i): void {
       if (i > 0) {
         let m = this.mappings.splice(i, 1)[0];
         this.mappings.splice(i - 1, 0, m);
@@ -58,7 +60,7 @@ export default {
         this.update();
       }
     },
-    moveDown: function(i) {
+    moveDown: function(i): void {
       if (i < this.mappings.length - 1) {
         let m = this.mappings.splice(i, 1)[0];
         this.mappings.splice(i + 1, 0, m);
@@ -66,7 +68,7 @@ export default {
         this.update();
       }
     },
-    deserialize: function(str) {
+    deserialize: function(str): string[] {
       if (str !== "") {
         // Ignore the header row here...
         return str
@@ -85,7 +87,7 @@ export default {
         return [];
       }
     },
-    serialize: function(mappings) {
+    serialize: function(mappings): string {
       let header = ["target-path\ttarget-node\tsource-node\tvalue"]
       let rows = mappings.map(m => m.join("\t"))
       let all = _concat(header, rows)

@@ -1,11 +1,12 @@
-<script>
+<script lang="ts">
+
 export default {
   props: {
     ns: String,
     p2: Element,
     container: Element,
   },
-  data: function () {
+  data: function (): Object {
     return {
       offset: 0,
     }
@@ -33,7 +34,7 @@ export default {
       this.container.style.userSelect = "none";
       this.container.style.cursor = "ns-resize";
       window.addEventListener("mouseup", () => {
-        console.log("Stop resize");
+        console.debug("Stop resize");
         this.offset = 0;
         this.$emit("resize", this.p2.clientHeight);
         this.container.style.userSelect = us;

@@ -1,7 +1,7 @@
 import {DateTime} from "luxon";
 import _memoize from 'lodash/memoize';
 
-function humanFileSize(bytes, si) {
+function humanFileSize(bytes, si): string {
   let f = (bytes, si) => {
     let thresh = si ? 1000 : 1024;
     if (Math.abs(bytes) < thresh) {
@@ -15,12 +15,12 @@ function humanFileSize(bytes, si) {
       bytes /= thresh;
       ++u;
     } while (Math.abs(bytes) >= thresh && u < units.length - 1);
-    return bytes.toFixed(1) + ' ' + units[u];
+    return `${bytes.toFixed(1)} ${units[u]}`;
   };
   return _memoize(f)(bytes, si);
 }
 
-function prettyDate(time) {
+function prettyDate(time): string {
   let f = time => {
     let m = DateTime.fromISO(time);
     return m.isValid ? m.toRelative() : "";
