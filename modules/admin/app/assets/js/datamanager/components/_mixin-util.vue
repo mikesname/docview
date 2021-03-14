@@ -8,8 +8,14 @@ import _toPairs from 'lodash/toPairs';
 import _omit from 'lodash/omit';
 import _set from 'lodash/set';
 
+import {prettyDate, humanFileSize} from "../common";
+
 export default {
   methods: {
+    decodeURI,
+    prettyDate,
+    humanFileSize,
+
     removeQueryParam: function(qs, names) {
       let qp = this.queryParams(qs);
       return this.queryString(_omit(qp, names));
@@ -48,7 +54,5 @@ export default {
       );
     }
   },
-
-  filters: { decodeURI }
 }
 </script>

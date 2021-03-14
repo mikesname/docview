@@ -1,8 +1,9 @@
-<script>
+<script lang="ts">
 
 import FilePickerSuggestion from './_file-picker-suggestion';
 
 import _debounce from 'lodash/debounce';
+import {DAO} from '../dao';
 
 export default {
   components: {FilePickerSuggestion},
@@ -11,14 +12,14 @@ export default {
     fileStage: String,
     value: Object,
     disabled: Boolean,
-    api: Object,
+    api: DAO,
     config: Object,
     placeholder: {
       type: String,
       default: "Select file..."
     }
   },
-  data: function () {
+  data: function (): object {
     return {
       text: null,
       selectedIdx: -1,
@@ -68,7 +69,6 @@ export default {
       })
     }
   },
-
 };
 </script>
 

@@ -1,10 +1,11 @@
-<script>
+<script lang="ts">
 
 import ModalWindow from './_modal-window';
-import {DAO} from '../dao';
+import {DAO, FileMeta} from '../dao';
 
 import _pick from 'lodash/pick';
 import _size from 'lodash/size';
+import {DOMEvent} from "codemirror";
 
 
 export default {
@@ -17,7 +18,7 @@ export default {
     waiting: Boolean,
     props: Array,
   },
-  data: function() {
+  data: function(): object {
     return {
       allowUpdates: this.opts ? this.opts.allowUpdates : false,
       tolerant: this.opts ? this.opts.tolerant : false,
@@ -43,7 +44,7 @@ export default {
           .then(data => this.$emit("saved-config", data, this.commit))
           .catch(error => this.$emit("error", "Error saving import config", error));
     },
-    uploadProperties: function(event) {
+    uploadProperties: function(event: Event | DragEvent) {
       this.loading = true;
       let fileList = event.dataTransfer
           ? event.dataTransfer.files
@@ -52,11 +53,9 @@ export default {
       if (fileList.length > 0) {
         let file = fileList[0];
 
-        this.api.uploadHandle(
-            this.datasetId,
-            this.config.config,
-            _pick(file, ['name', 'type', 'size'])
-        )
+        // NB: the fileStage arg here is 'config', since we are uploading a config file, rather then
+        // the stage of the ingest manager ('output').
+        this.api.uploadHandle(this.datasetId, this.config.config, _pick(file, ['name', 'type', 'size']))
             .then(data => this.api
                 .uploadFile(data.presignedUrl, file, () => true)
                 .then(() => {
@@ -71,7 +70,7 @@ export default {
             .finally(() => this.loading = false);
       }
     },
-    deleteProperties: function(file) {
+    deleteProperties: function(file: FileMeta) {
       this.loading = true;
       if (file.key === this.properties) {
         this.properties = null;
@@ -80,7 +79,7 @@ export default {
           .then(() => this.$emit("update"))
           .finally(() => this.loading = false);
     },
-    selectPropFile: function(file) {
+    selectPropFile: function(file: FileMeta) {
       this.properties = this.properties === file.key ? null : file.key;
     }
   },

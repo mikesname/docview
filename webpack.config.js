@@ -2,11 +2,15 @@
 
 let path = require('path');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
-
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 
 module.exports = (env, argv) => {
   return {
-    plugins: [new VueLoaderPlugin()],
+    plugins: [new VueLoaderPlugin(), new ForkTsCheckerWebpackPlugin({
+      typescript: {
+        configFile: '../../../../tsconfig.json'
+      }
+    })],
     stats: 'minimal',
     devtool: 'source-map',
     cache: true,
@@ -38,6 +42,8 @@ module.exports = (env, argv) => {
           loader: 'ts-loader',
           options: {
             appendTsSuffixTo: [/\.vue$/],
+            // Type checking done by forked
+            transpileOnly: true,
           }
         }
       ]

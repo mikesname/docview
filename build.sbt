@@ -281,7 +281,7 @@ val resourceSettings = Seq(
 )
 
 lazy val backend = Project(appName + "-backend", file("modules/backend"))
-  .disablePlugins(PlayScala)
+  .disablePlugins(PlayScala, SbtVuefy, SbtConcat)
   .settings(
     name := appName + "-backend",
     libraryDependencies ++= backendDependencies ++ testDependencies,
@@ -289,7 +289,7 @@ lazy val backend = Project(appName + "-backend", file("modules/backend"))
     parallelExecution := true)
 
 lazy val core = Project(appName + "-core", file("modules/core"))
-  .disablePlugins(PlayScala)
+  .disablePlugins(PlayScala, SbtVuefy, SbtConcat)
   .settings(name := appName + "-core", libraryDependencies ++= coreDependencies)
   .settings(commonSettings: _*)
   .dependsOn(backend % "test->test;compile->compile")
@@ -368,13 +368,14 @@ lazy val guides = Project(appName + "-guides", file("modules/guides"))
 
 // Solr search engine implementation.
 lazy val solr = Project(appName + "-solr", file("modules/solr"))
-  .disablePlugins(PlayScala, SbtWeb)
+  .disablePlugins(PlayScala)
   .settings(commonSettings: _*)
   .dependsOn(core % "test->test;compile->compile")
 
 lazy val main = Project(appName, file("."))
   .enablePlugins(play.sbt.PlayScala)
   .enablePlugins(LauncherJarPlugin)
+  .disablePlugins(SbtVuefy, SbtConcat, SbtDigest, SbtGzip, SbtUglify)
   .settings(libraryDependencies ++= coreDependencies ++ testDependencies)
   .settings(commonSettings ++ webAppSettings ++ resourceSettings)
   .dependsOn(portal % "test->test;compile->compile", admin, guides, api, solr)

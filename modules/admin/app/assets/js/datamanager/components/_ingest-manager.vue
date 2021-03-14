@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 
 import FilterControl from './_filter-control';
 import ValidateButton from './_validate-button';
@@ -18,7 +18,6 @@ import MixinStage from './_mixin-stage';
 import MixinUtil from './_mixin-util';
 import {DAO} from '../dao';
 
-import _fromPairs from 'lodash/fromPairs';
 import _startsWith from 'lodash/startsWith';
 import _last from 'lodash/last';
 
@@ -205,7 +204,7 @@ export default {
             <a href="#" class="nav-link" v-bind:class="{'active': tab === 'preview'}"
                v-on:click.prevent="tab = 'preview'">
               File Preview
-              <template v-if="previewing"> - {{previewing.key|decodeURI}}</template>
+              <template v-if="previewing"> - {{ decodeURI(previewing.key) }}</template>
             </a>
           </li>
           <li class="nav-item">

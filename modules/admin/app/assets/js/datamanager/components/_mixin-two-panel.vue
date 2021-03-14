@@ -1,13 +1,13 @@
-<script>
+<script lang="ts">
 
 export default {
-    data: function() {
+    data: function(): object {
     return {
       panelSize: null,
     }
   },
   methods: {
-    setPanelSize: function (arbitrarySize) {
+    setPanelSize: function (arbitrarySize): void {
       this.panelSize = arbitrarySize;
     }
   }

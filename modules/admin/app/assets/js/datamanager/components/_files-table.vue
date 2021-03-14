@@ -40,6 +40,10 @@ export default {
     }
   },
   methods: {
+    prettyDate,
+    humanFileSize,
+    decodeURI,
+
     toggleAll: function (checked) {
       this.files.forEach(f => this.toggleItem(f, checked));
     },
@@ -63,11 +67,6 @@ export default {
       }
     },
   },
-  filters: {
-    prettyDate,
-    humanFileSize,
-    decodeURI
-  }
 };
 </script>
 
@@ -97,9 +96,9 @@ export default {
                  v-on:input.stop.prevent.self="toggleItem(file, !selected[file.key])"
                  v-on:click="$event.stopPropagation()">
         </td>
-        <td>{{file.key|decodeURI}}</td>
-        <td v-bind:title="file.lastModified">{{file.lastModified | prettyDate}}</td>
-        <td>{{file.size | humanFileSize(true)}}</td>
+        <td>{{ decodeURI(file.key) }}</td>
+        <td v-bind:title="file.lastModified">{{ prettyDate(file.lastModified) }}</td>
+        <td>{{ humanFileSize(file.size, true) }}</td>
 
         <td v-if="loadingInfo !== null">
           <a href="#" v-on:click.prevent.stop="$emit('info', file.key)">
@@ -145,7 +144,7 @@ export default {
       <i v-else class="fa fa-fw fa-caret-down"/>
     </button>
     <div class="panel-placeholder" v-else-if="loaded && filter && files.length === 0">
-      No files found starting with &quot;<code>{{filter}}</code>&quot;...
+      No files found starting with &quot;<code>{{ filter }}</code>&quot;...
     </div>
     <div class="panel-placeholder" v-else-if="loaded && files.length === 0">
       There are no files here yet.

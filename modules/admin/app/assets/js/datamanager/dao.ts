@@ -299,4 +299,4 @@ class DAO {
   }
 }
 
-export { DAO, FileMeta };
+export { DAO, FileMeta, ImportDataset };

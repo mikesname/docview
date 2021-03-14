@@ -183,7 +183,7 @@ export default {
             <a href="#" class="nav-link" v-bind:class="{'active': tab === 'preview'}"
                v-on:click.prevent="tab = 'preview'">
               File Preview
-              <template v-if="previewing"> - {{previewing.key|decodeURI}}</template>
+              <template v-if="previewing"> - {{ decodeURI(previewing.key) }}</template>
             </a>
           </li>
           <li class="nav-item">

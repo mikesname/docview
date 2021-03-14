@@ -14,10 +14,12 @@ import MixinTwoPanel from './_mixin-two-panel';
 import MixinPreview from './_mixin-preview';
 import MixinValidator from './_mixin-validator';
 import MixinError from './_mixin-error';
+import MixinUtil from './_mixin-util';
 
 import {DAO} from '../dao';
 
 import _findIndex from 'lodash/findIndex';
+import _pick from 'lodash/pick';
 
 /**
  * Custom Error class
@@ -62,7 +64,7 @@ function sequentialUpload(uploadFunc, argArray, index, {done, cancelled}) {
 
 export default {
   components: {FilterControl, FilesTable, LogWindow, DragHandle, ModalInfo, PanelFilePreview, ValidateButton, DeleteButton, UploadProgress},
-  mixins: [MixinStage, MixinTwoPanel, MixinPreview, MixinValidator, MixinError],
+  mixins: [MixinStage, MixinTwoPanel, MixinPreview, MixinValidator, MixinError, MixinUtil],
   props: {
     datasetId: String,
     fileStage: String,
@@ -107,7 +109,7 @@ export default {
         return Promise.reject(new UploadCancelled(file.name));
       }
 
-      return this.api.uploadHandle(this.datasetId, this.fileStage, file)
+      return this.api.uploadHandle(this.datasetId, this.fileStage, _pick(file, ['name', 'type', 'size']))
           .then(data => {
             let self = this;
             this.setUploadProgress(file, 0);
@@ -250,7 +252,7 @@ export default {
             <a href="#" class="nav-link" v-bind:class="{'active': tab === 'preview'}"
                v-on:click.prevent="tab = 'preview'">
               File Preview
-              <template v-if="previewing"> - {{previewing.key}}</template>
+              <template v-if="previewing"> - {{ previewing.key }}</template>
             </a>
           </li>
           <li class="nav-item">

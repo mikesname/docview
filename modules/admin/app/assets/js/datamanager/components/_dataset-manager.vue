@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 
 import DatasetForm from './_dataset-form';
 import OaipmhManager from './_oaipmh-manager';
@@ -8,7 +8,7 @@ import RsManager from './_rs-manager';
 import ConvertManager from './_convert-manager';
 
 import MixinUtil from './_mixin-util';
-import {DAO} from '../dao';
+import {DAO, ImportDataset} from '../dao';
 
 import _find from 'lodash/find';
 import _merge from 'lodash/merge';
@@ -35,17 +35,17 @@ export default {
     }
   },
   methods: {
-    setError: function(err, exc) {
+    setError: function(err: string, exc?: Error) {
       this.error = err + (exc ? (": " + exc.message) : "");
     },
-    switchTab: function(tab) {
+    switchTab: function(tab: string) {
       this.tab = tab;
       history.pushState(
           _merge(this.queryParams(window.location.search), {'tab': tab}),
           document.title,
           this.setQueryParam(window.location.search, 'tab', tab));
     },
-    selectDataset: function(ds) {
+    selectDataset: function(ds?: ImportDataset) {
       if (!ds) {
         this.dataset = null;
         return;
@@ -74,10 +74,10 @@ export default {
           .catch(e => this.showError("Error loading datasets", e))
           .finally(() => this.loaded = true);
     },
-    reloadDatasets: function(ds) {
+    reloadDatasets: function(ds?: ImportDataset) {
       this.loadDatasets().then(() => this.selectDataset(ds));
     },
-    stageName: function(code) {
+    stageName: function(code: string): string {
       switch (code) {
         case "oaipmh": return "Harvesting";
         case "upload": return "Uploads";
