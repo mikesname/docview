@@ -13,7 +13,7 @@ import MixinTwoPanel from './_mixin-two-panel';
 import MixinValidator from './_mixin-validator';
 import MixinError from './_mixin-error';
 import MixinUtil from './_mixin-util';
-import DAO from '../dao';
+import {DAO} from '../dao';
 
 import _partition from 'lodash/partition';
 import _takeWhile from 'lodash/takeWhile';

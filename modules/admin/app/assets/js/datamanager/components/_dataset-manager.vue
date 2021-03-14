@@ -8,7 +8,7 @@ import RsManager from './_rs-manager';
 import ConvertManager from './_convert-manager';
 
 import MixinUtil from './_mixin-util';
-import DAO from '../dao';
+import {DAO} from '../dao';
 
 import _find from 'lodash/find';
 import _merge from 'lodash/merge';

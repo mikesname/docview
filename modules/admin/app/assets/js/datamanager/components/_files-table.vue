@@ -1,7 +1,7 @@
 <script>
 
 import {prettyDate, humanFileSize} from "../common";
-import DAO from '../dao';
+import {DAO} from '../dao';
 import _fromPairs from 'lodash/fromPairs';
 
 

@@ -16,7 +16,7 @@ import MixinError from './_mixin-error';
 import MixinPreview from './_mixin-preview';
 import MixinStage from './_mixin-stage';
 import MixinUtil from './_mixin-util';
-import DAO from '../dao';
+import {DAO} from '../dao';
 
 import _fromPairs from 'lodash/fromPairs';
 import _startsWith from 'lodash/startsWith';

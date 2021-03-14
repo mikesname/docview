@@ -17,7 +17,7 @@ import MixinValidator from './_mixin-validator';
 import MixinError from './_mixin-error';
 import MixinUtil from './_mixin-util';
 
-import DAO from '../dao';
+import {DAO} from '../dao';
 
 
 export default {
@@ -90,7 +90,7 @@ export default {
       }
     },
     loadConfig: function() {
-      this.api.getConfig(this.datasetId)
+      this.api.getOaiPmhConfig(this.datasetId)
           .then(data => this.opts = data);
     },
   },

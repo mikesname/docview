@@ -1,7 +1,7 @@
 <script>
 
 import ModalWindow from './_modal-window';
-import DAO from '../dao';
+import {DAO} from '../dao';
 
 export default {
   components: {ModalWindow},
@@ -33,13 +33,13 @@ export default {
   methods: {
     save: function() {
       this.$emit("saving");
-      this.api.saveConfig(this.datasetId, {url: this.url, format: this.format, set: this.set})
+      this.api.saveOaiPmhConfig(this.datasetId, {url: this.url, format: this.format, set: this.set})
           .then(data => this.$emit("saved-config", data, !this.noResume))
           .catch(error => this.$emit("error", "Error saving OAI-PMH config", error));
     },
     testEndpoint: function() {
       this.testing = true;
-      this.api.testConfig(this.datasetId, {url: this.url, format: this.format, set: this.set})
+      this.api.testOaiPmhConfig(this.datasetId, {url: this.url, format: this.format, set: this.set})
           .then( r => {
             this.tested = !!r.name;
             this.error = null;

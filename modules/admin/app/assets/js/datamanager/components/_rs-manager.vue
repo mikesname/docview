@@ -17,7 +17,7 @@ import MixinError from './_mixin-error';
 import MixinStage from './_mixin-stage';
 import MixinUtil from './_mixin-util';
 
-import DAO from '../dao';
+import {DAO} from '../dao';
 
 
 export default {

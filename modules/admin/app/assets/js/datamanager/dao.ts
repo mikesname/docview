@@ -66,6 +66,27 @@ interface ImportDataset extends ImportDatasetInfo {
   created: string,
 }
 
+interface FileMeta {
+  classifier: string,
+  key: string,
+  lastModified: string,
+  size: number,
+  eTag?: string,
+  contentType?: string,
+  versionId?: string,
+}
+
+interface FileList {
+  files: FileMeta[],
+  truncated: boolean,
+}
+
+interface FileToUpload {
+  name: string,
+  type: string,
+  size: number,
+}
+
 /**
  * A data access object encapsulating the management API endpoints.
  */
@@ -96,7 +117,7 @@ class DAO {
     }).then(r => r.data);
   }
 
-  listFiles(ds: string, stage: string, prefix: string, after: string): Promise<Object> {
+  listFiles(ds: string, stage: string, prefix: string, after?: string): Promise<FileList> {
     return DAO.call(this.service.ImportFiles.listFiles(this.repoId, ds, stage, prefix, after));
   }
 
@@ -125,19 +146,19 @@ class DAO {
     return DAO.call(this.service.ImportFiles.deleteFiles(this.repoId, ds, stage), paths);
   }
 
-  validateFiles(ds: string, stage: string, tagToPath: object): Promise<Object[]> {
+  validateFiles(ds: string, stage: string, tagToPath: object): Promise<object[]> {
     return DAO.call(this.service.ImportFiles.validateFiles(this.repoId, ds, stage), tagToPath);
   }
 
-  info(ds: string, stage: string, key: string, versionId?: string): Promise<Object> {
+  info(ds: string, stage: string, key: string, versionId?: string): Promise<object> {
     return DAO.call(this.service.ImportFiles.info(this.repoId, ds, stage, key, versionId));
   }
 
-  fileUrls(ds: string, stage: string, paths: string[]): Promise<Object> {
+  fileUrls(ds: string, stage: string, paths: string[]): Promise<object> {
     return DAO.call(this.service.ImportFiles.fileUrls(this.repoId, ds, stage), paths);
   }
 
-  uploadHandle(ds: string, stage: string, fileSpec: object) {
+  uploadHandle(ds: string, stage: string, fileSpec: FileToUpload): Promise<{presignedUrl: string}> {
     return DAO.call(this.service.ImportFiles.uploadHandle(this.repoId, ds, stage), fileSpec);
   }
 
@@ -169,14 +190,6 @@ class DAO {
       });
   }
 
-  harvest(ds: string, config: OaiPmhConfig, fromLast: boolean): Promise<JobMonitor> {
-    return DAO.call(this.service.OaiPmhConfigs.harvest(this.repoId, ds, fromLast), config);
-  }
-
-  cancelHarvest(jobId: string): Promise<{ok: boolean}> {
-    return DAO.call(this.service.OaiPmhConfigs.cancelHarvest(this.repoId, jobId));
-  }
-
   sync(ds: string, config: ResourceSyncConfig): Promise<JobMonitor> {
     return DAO.call(this.service.ResourceSyncConfigs.sync(this.repoId, ds), config);
   }
@@ -201,20 +214,28 @@ class DAO {
     return DAO.call(this.service.ResourceSyncConfigs.test(this.repoId, ds), config);
   }
 
-  getConfig(ds: string): Promise<OaiPmhConfig | null> {
+  getOaiPmhConfig(ds: string): Promise<OaiPmhConfig | null> {
     return DAO.call(this.service.OaiPmhConfigs.get(this.repoId, ds));
   }
 
-  saveConfig(ds: string, config: OaiPmhConfig): Promise<OaiPmhConfig> {
+  saveOaiPmhConfig(ds: string, config: OaiPmhConfig): Promise<OaiPmhConfig> {
     return DAO.call(this.service.OaiPmhConfigs.save(this.repoId, ds), config);
   }
 
-  deleteConfig(ds: string): Promise<void> {
+  deleteOaiPmhConfig(ds: string): Promise<void> {
     return DAO.call(this.service.OaiPmhConfigs.delete(this.repoId, ds));
   }
 
-  testConfig(ds: string, config: OaiPmhConfig): Promise<Object> {
+  testOaiPmhConfig(ds: string, config: OaiPmhConfig): Promise<object> {
     return DAO.call(this.service.OaiPmhConfigs.test(this.repoId, ds), config);
+  }
+
+  harvest(ds: string, config: OaiPmhConfig, fromLast: boolean): Promise<JobMonitor> {
+    return DAO.call(this.service.OaiPmhConfigs.harvest(this.repoId, ds, fromLast), config);
+  }
+
+  cancelHarvest(jobId: string): Promise<{ok: boolean}> {
+    return DAO.call(this.service.OaiPmhConfigs.cancelHarvest(this.repoId, jobId));
   }
 
   convert(ds: string, key: string, config: ConvertConfig): Promise<JobMonitor> {
@@ -229,7 +250,7 @@ class DAO {
     return DAO.call(this.service.DataTransformations.cancelConvert(this.repoId, jobId));
   }
 
-  getConvertConfig(ds: string): Promise<Object | null> {
+  getConvertConfig(ds: string): Promise<object | null> {
     return DAO.call(this.service.DataTransformations.getConfig(this.repoId, ds));
   }
 
@@ -261,7 +282,7 @@ class DAO {
     return DAO.call(this.service.ImportDatasets.list(this.repoId));
   }
 
-  datasetStats() {
+  datasetStats(): Promise<Map<string, number>> {
     return DAO.call(this.service.ImportDatasets.stats(this.repoId));
   }
 
@@ -278,4 +299,4 @@ class DAO {
   }
 }
 
-export default DAO;
+export { DAO, FileMeta };

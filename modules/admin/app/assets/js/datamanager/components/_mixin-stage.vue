@@ -1,12 +1,15 @@
-<script>
+<script lang="ts">
+
 
 import _debounce from 'lodash/debounce';
 import _forIn from 'lodash/forIn';
 import _fromPairs from 'lodash/fromPairs';
 import _isEmpty from 'lodash/isEmpty';
 
+import {DAO, FileMeta} from '../dao';
 
-let initialStageState = function() {
+
+let initialStageState = function(): object {
   return {
     loaded: false,
     loadingMore: false,
@@ -31,27 +34,28 @@ export default {
   props: {
     datasetId: String,
     active: Boolean,
+    api: DAO,
   },
-  data: function() {
+  data: function(): object {
     return initialStageState();
   },
   computed: {
-    selectedKeys: function () {
+    selectedKeys: function (): string[] {
       return Object.keys(this.selected);
     },
-    selectedTags: function() {
-      return _fromPairs(Object.values(this.selected).map(f => [f.eTag, f.key]));
+    selectedTags: function(): object {
+      return _fromPairs(Object.values(this.selected).map((f: FileMeta) => [f.eTag, f.key]));
     }
   },
   methods: {
     reset: function() {
       Object.assign(this.$data, initialStageState());
     },
-    clearFilter: function () {
+    clearFilter: function (): Promise<void> {
       this.filter.value = "";
       return this.refresh();
     },
-    filterFiles: function () {
+    filterFiles: function (): Promise<void> {
       let func = () => {
         this.filter.active = true;
         return this.load().then(r => {
@@ -64,16 +68,16 @@ export default {
     refresh: _debounce(function() {
       return this.load();
     }, 500),
-    load: function () {
+    load: function (): Promise<void> {
       return this.api.listFiles(this.datasetId, this.fileStage, this.filter.value)
         .then(data => {
           this.files = data.files;
           this.truncated = data.truncated;
         })
-        .catch(error => this.showError("Error listing files", error))
+        .catch(error => this.showError(`Error retrieving file list for stage ${this.fileStage}: `, error))
         .finally(() => this.loaded = true);
     },
-    loadMore: function () {
+    loadMore: function(): Promise<void> {
       this.loadingMore = true;
       let from = this.files.length > 0
         ? this.files[this.files.length - 1].key
@@ -128,7 +132,7 @@ export default {
     deselectItem: function(file) {
       this.$delete(this.selected, file.key);
     },
-    showError: function() {}, // Overridden by inheritors
+    showError: function(msg: string, exp?: object) {}, // Overridden by inheritors
     deselect: function() {
       this.previewing = null;
     }

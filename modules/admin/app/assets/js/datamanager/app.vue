@@ -2,7 +2,7 @@
 
 import DatasetManager from './components/_dataset-manager';
 import MixinUtil from './components/_mixin-util';
-import DAO from "./dao";
+import {DAO} from "./dao";
 
 
 if (typeof window !== 'undefined') {

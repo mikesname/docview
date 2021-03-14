@@ -15,7 +15,7 @@ import MixinPreview from './_mixin-preview';
 import MixinValidator from './_mixin-validator';
 import MixinError from './_mixin-error';
 
-import DAO from '../dao';
+import {DAO} from '../dao';
 
 import _findIndex from 'lodash/findIndex';
 
@@ -107,11 +107,7 @@ export default {
         return Promise.reject(new UploadCancelled(file.name));
       }
 
-      return this.api.uploadHandle(this.datasetId, this.fileStage, {
-        name: file.name,
-        type: file.type,
-        size: file.size
-      })
+      return this.api.uploadHandle(this.datasetId, this.fileStage, file)
           .then(data => {
             let self = this;
             this.setUploadProgress(file, 0);
