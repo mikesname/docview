@@ -72,7 +72,6 @@ class OaiPmhHarvesterManagerSpec extends AkkaTestkitSpecs2Support with Integrati
 
     "cancel jobs" in new ITestApp {
       val events = MockHarvestEventService()
-      events.events.clear()
       val harvester = system.actorOf(Props(harvesting.OaiPmhHarvesterManager(job, client, storage, events)))
 
       harvester ! self // initial subscriber should start harvesting
@@ -88,7 +87,7 @@ class OaiPmhHarvesterManagerSpec extends AkkaTestkitSpecs2Support with Integrati
 
       // Wait up to 20 seconds for the expected events to appear
       events.events.find(_.eventType == HarvestEventType.Cancelled) must beSome
-        .eventually(retries = 100, sleep = 200.millis)
+        .eventually(retries = 300, sleep = 200.millis)
     }
   }
 }

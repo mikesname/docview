@@ -27,13 +27,22 @@
     "vuedraggable": "^2.24.3"
   },
   "scripts": {
-    "test": "sbt test"
+    "test": "jest"
   },
   "author": "EHRI",
   "license": "EUPL-1.2",
   "devDependencies": {
+    "@babel/core": "^7.13.10",
+    "@babel/plugin-transform-typescript": "^7.13.0",
+    "@babel/preset-env": "^7.13.10",
     "@types/codemirror": "^0.0.108",
+    "@types/jest": "^26.0.20",
+    "@types/lodash": "^4.14.168",
+    "@types/luxon": "^1.26.2",
     "@vue/test-utils": "^1.1.3",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^26.6.3",
+    "babel-preset-typescript-vue": "^1.1.1",
     "css-loader": "^5.1.2",
     "fork-ts-checker-webpack-plugin": "^6.1.1",
     "grunt": "^1.3.0",
@@ -42,8 +51,11 @@
     "jsdom": "^16.4.0",
     "jsdom-global": "^3.0.2",
     "style-loader": "^2.0.0",
+    "ts-jest": "^26.5.3",
     "ts-loader": "^8.0.18",
+    "ts-node": "^9.1.1",
     "typescript": "^4.2.3",
+    "vue-jest": "^3.0.7",
     "vue-loader": "^15.9.6",
     "vue-template-compiler": "^2.6.12",
     "webpack": "^5.24.3",
@@ -59,5 +71,40 @@
   "bugs": {
     "url": "https://github.com/EHRI/ehri-frontend/issues"
   },
-  "homepage": "https://github.com/EHRI/ehri-frontend#README.md"
+  "homepage": "https://github.com/EHRI/ehri-frontend#README.md",
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ],
+  "jest": {
+    "globals": {
+      "CONFIG": {},
+      "SERVICE": {}
+    },
+    "testEnvironment": "jsdom",
+    "collectCoverage": false,
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts",
+      "node",
+      "vue"
+    ],
+    "moduleNameMapper": {
+      "\\.(css|less)$": "<rootDir>/modules/admin/app/assets/js/__mocks__/styleMock.js"
+    },
+    "testMatch": [
+      "**/__tests__/**/*.[jt]s?(x)",
+      "**/?(*.)+(spec|test).[tj]s?(x)"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/target/"
+    ],
+    "transform": {
+      "^.+\\.(ts|tsx)$": "ts-jest",
+      ".*\\.(vue)$": "vue-jest"
+    }
+  }
 }

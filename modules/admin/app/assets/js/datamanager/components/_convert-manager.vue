@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 
 import Draggable from 'vuedraggable';
 import FilePicker from './_file-picker';
@@ -92,7 +92,7 @@ export default {
       this.editing = item;
     },
     convert: function(file, force) {
-      console.log("Converting: ", file)
+      console.debug("Converting:", file)
       this.api.convert(this.datasetId, file ? file.key : null, {mappings: this.mappings, force: force})
           .then(data => {
             this.convertJobId = data.jobId;
@@ -137,7 +137,7 @@ export default {
         this.monitorConvert(this.config.monitorUrl(jobId), jobId);
       }
     },
-    loadConfig: function() {
+    loadConfig: function(): Promise<void> {
       return this.api.getConvertConfig(this.datasetId)
           .then(data => this.mappings = data.map(item => item.id))
           .catch(error => this.showError("Error loading convert configuration", error));

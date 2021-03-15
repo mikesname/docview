@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 
 import DatasetManager from './components/_dataset-manager';
 import MixinUtil from './components/_mixin-util';

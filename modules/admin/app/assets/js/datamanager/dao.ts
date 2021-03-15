@@ -39,9 +39,11 @@ interface JobMonitor {
   url: string,
 }
 
+type TransformationType = 'xquery' | 'xslt';
+
 interface DataTransformationInfo {
   name: string,
-  bodyType: string,
+  bodyType: TransformationType,
   body: string,
   comments: string
 }
@@ -52,10 +54,12 @@ interface DataTransformation extends DataTransformationInfo{
   created: string,
 }
 
+type ImportDatasetSrc = 'oaipmh' | 'rs' | 'upload';
+
 interface ImportDatasetInfo {
   id: string,
   name: string,
-  src: string,
+  src: ImportDatasetSrc,
   fonds?: string,
   sync: boolean,
   notes?: string,
@@ -250,7 +254,7 @@ class DAO {
     return DAO.call(this.service.DataTransformations.cancelConvert(this.repoId, jobId));
   }
 
-  getConvertConfig(ds: string): Promise<object | null> {
+  getConvertConfig(ds: string): Promise<DataTransformation[]> {
     return DAO.call(this.service.DataTransformations.getConfig(this.repoId, ds));
   }
 
@@ -299,4 +303,4 @@ class DAO {
   }
 }
 
-export { DAO, FileMeta, ImportDataset };
+export { DAO, FileMeta, ImportDataset, ImportDatasetSrc };

@@ -8,7 +8,7 @@ import RsManager from './_rs-manager';
 import ConvertManager from './_convert-manager';
 
 import MixinUtil from './_mixin-util';
-import {DAO, ImportDataset} from '../dao';
+import {DAO, ImportDataset, ImportDatasetSrc} from '../dao';
 
 import _find from 'lodash/find';
 import _merge from 'lodash/merge';
@@ -77,7 +77,7 @@ export default {
     reloadDatasets: function(ds?: ImportDataset) {
       this.loadDatasets().then(() => this.selectDataset(ds));
     },
-    stageName: function(code: string): string {
+    stageName: function(code: ImportDatasetSrc): string {
       switch (code) {
         case "oaipmh": return "Harvesting";
         case "upload": return "Uploads";

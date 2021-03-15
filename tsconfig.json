@@ -1,10 +1,10 @@
 {
   "compilerOptions": {
-    "diagnostics": true,
-    "target": "esnext",
+    "diagnostics": false,
+    "strict": true,
+    "target": "es2015",
     "module": "esnext",
     "allowJs": true,
-    "jsx": "preserve",
     "moduleResolution": "node"
   },
   "exclude": ["node_modules"],

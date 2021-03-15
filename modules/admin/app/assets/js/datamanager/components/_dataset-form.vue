@@ -1,10 +1,12 @@
-<script>
+<script lang="ts">
 
 import ModalWindow from './_modal-window';
+import ModalAlert from './_modal-alert';
+
 import {DAO} from '../dao';
 
 export default {
-  components: {ModalWindow},
+  components: {ModalWindow, ModalAlert},
   props: {
     api: DAO,
     config: Object,
@@ -26,7 +28,7 @@ export default {
     }
   },
   methods: {
-    save: function() {
+    save: function(): void {
       this.saving = true;
 
       let data = {
@@ -51,10 +53,9 @@ export default {
         } else {
           throw error;
         }
-      })
-          .finally(() => this.saving = false);
+      }).finally(() => this.saving = false);
     },
-    remove: function() {
+    remove: function(): void {
       this.deleting = true;
       this.showRemoveDialog = false;
       this.api.deleteDataset(this.id)
@@ -76,19 +77,19 @@ export default {
     }
   },
   computed: {
-    isValidConfig: function() {
+    isValidConfig: function(): boolean {
       return this.src !== null
           && this.name !== null
           && this.id !== null
           && this.isValidFonds;
     },
-    isValidIdentifier: function() {
+    isValidIdentifier: function(): boolean {
       return !this.id || (this.id.match(/^[a-z0-9_]+$/) !== null && this.id.length <= 50);
     },
-    isValidFonds: function() {
+    isValidFonds: function(): boolean {
       return !this.fonds || this.fonds.match("^" + this.config.repoId + "-.+");
     },
-    hasChanged: function() {
+    hasChanged: function(): boolean {
       return this.info === null || (
           this.info.name !== this.name
           || this.info.src !== this.src
