@@ -3,7 +3,7 @@
 import FilePickerSuggestion from './_file-picker-suggestion';
 
 import _debounce from 'lodash/debounce';
-import {DAO} from '../dao';
+import DataManagerApi from '../api';
 
 export default {
   components: {FilePickerSuggestion},
@@ -12,7 +12,7 @@ export default {
     fileStage: String,
     value: Object,
     disabled: Boolean,
-    api: DAO,
+    api: DataManagerApi,
     config: Object,
     placeholder: {
       type: String,

@@ -2,10 +2,10 @@
 
 import Draggable from 'vuedraggable';
 import FilePicker from './_file-picker';
-import ConvertConfig from './_convert-config';
+import ModalConvertConfig from './_modal-convert-config';
 import TransformationEditor from './_transformation-editor';
 import TransformationItem from './_transformation-item';
-import LogWindow from './_log-window';
+import PanelLogWindow from './_panel-log-window';
 import DragHandle from './_drag-handle';
 import PanelConvertPreview from './_panel-convert-preview';
 
@@ -13,7 +13,7 @@ import MixinTwoPanel from './_mixin-two-panel';
 import MixinValidator from './_mixin-validator';
 import MixinError from './_mixin-error';
 import MixinUtil from './_mixin-util';
-import {DAO} from '../dao';
+import DataManagerApi from '../api';
 
 import _partition from 'lodash/partition';
 import _takeWhile from 'lodash/takeWhile';
@@ -40,13 +40,13 @@ let initialConvertState = function(config) {
 };
 
 export default {
-  components: {Draggable, FilePicker, ConvertConfig, PanelConvertPreview, TransformationEditor, TransformationItem, LogWindow, DragHandle},
+  components: {Draggable, FilePicker, ModalConvertConfig, PanelConvertPreview, TransformationEditor, TransformationItem, PanelLogWindow, DragHandle},
   mixins: [MixinTwoPanel, MixinValidator, MixinError, MixinUtil],
   props: {
     datasetId: String,
     fileStage: String,
     config: Object,
-    api: DAO,
+    api: DataManagerApi,
     active: Boolean,
   },
   data: function () {
@@ -127,7 +127,7 @@ export default {
           this.removeUrlState('convert-job-id');
         }
       };
-      worker.postMessage({type: 'websocket', url: url, DONE: DAO.DONE_MSG, ERR: DAO.ERR_MSG});
+      worker.postMessage({type: 'websocket', url: url, DONE: DataManagerApi.DONE_MSG, ERR: DataManagerApi.ERR_MSG});
       this.replaceUrlState('convert-job-id', jobId);
     },
     resumeMonitor: function() {
@@ -178,7 +178,7 @@ export default {
 </script>
 
 <template>
-  <div id="convert-manager-container" class="stage-manager-container">
+  <div id="manager-convert-container" class="stage-manager-container">
 
     <transformation-editor
         v-if="editing !== null"
@@ -224,7 +224,7 @@ export default {
     <div id="convert-panel-container" class="panel-container">
       <div class="top-panel">
 
-        <convert-config
+        <modal-convert-config
             v-bind:show="showOptions"
             v-bind:config="config"
             v-bind:api="api"
@@ -309,8 +309,8 @@ export default {
           <li>
             <drag-handle
                 v-bind:ns="fileStage"
-                v-bind:p2="$root.$el.querySelector('#convert-status-panels')"
-                v-bind:container="$root.$el.querySelector('#convert-panel-container')"
+                v-bind:p2="() => $root.$el.querySelector('#convert-status-panels')"
+                v-bind:container="() => $root.$el.querySelector('#convert-panel-container')"
                 v-on:resize="setPanelSize"
             />
           </li>
@@ -337,7 +337,7 @@ export default {
             </div>
           </div>
           <div class="status-panel log-container" v-show="tab === 'convert'">
-            <log-window v-bind:log="log" v-if="log.length > 0"/>
+            <panel-log-window v-bind:log="log" v-if="log.length > 0"/>
             <div class="panel-placeholder" v-else>
               Convert log output will show here.
             </div>

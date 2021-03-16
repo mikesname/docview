@@ -1,13 +1,13 @@
 <script lang="ts">
 
 import FilterControl from './_filter-control';
-import ValidateButton from './_validate-button';
-import DeleteButton from './_delete-button';
+import ButtonValidate from './_button-validate.vue';
+import ButtonDelete from './_button-delete.vue';
 import FilesTable from './_files-table';
 import DragHandle from './_drag-handle';
 import ModalInfo from './_modal-info';
-import LogWindow from './_log-window';
-import IngestOptionsPanel from './_ingest-options-panel';
+import PanelLogWindow from './_panel-log-window';
+import ModalIngestConfig from './_modal-ingest-config';
 import PanelFilePreview from './_panel-file-preview';
 
 import MixinTwoPanel from './_mixin-two-panel';
@@ -16,20 +16,20 @@ import MixinError from './_mixin-error';
 import MixinPreview from './_mixin-preview';
 import MixinStage from './_mixin-stage';
 import MixinUtil from './_mixin-util';
-import {DAO} from '../dao';
+import DataManagerApi from '../api';
 
 import _startsWith from 'lodash/startsWith';
 import _last from 'lodash/last';
 
 
 export default {
-  components: {FilterControl, FilesTable, LogWindow, DragHandle, ModalInfo, PanelFilePreview, ValidateButton, DeleteButton, IngestOptionsPanel},
+  components: {FilterControl, FilesTable, PanelLogWindow, DragHandle, ModalInfo, PanelFilePreview, ButtonValidate, ButtonDelete, ModalIngestConfig},
   mixins: [MixinStage, MixinTwoPanel, MixinPreview, MixinValidator, MixinError, MixinUtil],
   props: {
     datasetId: String,
     fileStage: String,
     config: Object,
-    api: DAO,
+    api: DataManagerApi,
   },
   data: function () {
     return {
@@ -62,7 +62,7 @@ export default {
           this.removeUrlState('ingest-job-id');
         }
       };
-      worker.postMessage({type: 'websocket', url: url, DONE: DAO.DONE_MSG, ERR: DAO.ERR_MSG});
+      worker.postMessage({type: 'websocket', url: url, DONE: DataManagerApi.DONE_MSG, ERR: DataManagerApi.ERR_MSG});
       this.replaceUrlState('ingest-job-id', jobId);
     },
     resumeMonitor: function() {
@@ -125,14 +125,14 @@ export default {
           v-on:clear="clearFilter"
           v-on:refresh="load" />
 
-      <validate-button
+      <button-validate
           v-bind:selected="selectedKeys.length"
           v-bind:disabled="files.length === 0 || ingestJobId !== null"
           v-bind:active="validationRunning"
           v-on:validate="validateFiles(selectedTags)"
       />
 
-      <delete-button
+      <button-delete
           v-bind:selected="selectedKeys.length"
           v-bind:disabled="files.length === 0 || ingestJobId !== null"
           v-bind:active="deleting.length > 0"
@@ -152,7 +152,7 @@ export default {
         Ingest All...
       </button>
 
-      <ingest-options-panel
+      <modal-ingest-config
           v-if="showOptions"
           v-bind:waiting="waiting"
           v-bind:props="propertyConfigs"
@@ -171,7 +171,6 @@ export default {
     <div id="ingest-panel-container" class="panel-container">
       <div class="top-panel">
         <files-table
-            v-bind:api="api"
             v-bind:fileStage="fileStage"
             v-bind:loaded="loaded"
             v-bind:loading-more="loadingMore"
@@ -194,6 +193,8 @@ export default {
             v-on:item-selected="selectItem"
             v-on:item-deselected="deselectItem"
             v-on:deselect-all="deselect"
+            v-on:toggle-all="toggleAll"
+            v-on:toggle-file="toggleFile"
             v-on:info="info"
         />
       </div>
@@ -222,8 +223,8 @@ export default {
           <li>
             <drag-handle
                 v-bind:ns="fileStage"
-                v-bind:p2="$root.$el.querySelector('#ingest-status-panel')"
-                v-bind:container="$root.$el.querySelector('#ingest-panel-container')"
+                v-bind:p2="() => $root.$el.querySelector('#ingest-status-panel')"
+                v-bind:container="() => $root.$el.querySelector('#ingest-panel-container')"
                 v-on:resize="setPanelSize"
             />
           </li>
@@ -246,13 +247,13 @@ export default {
             </div>
           </div>
           <div class="status-panel log-container" v-show="tab === 'validation'">
-            <log-window v-bind:log="validationLog" v-if="validationLog.length > 0"/>
+            <panel-log-window v-bind:log="validationLog" v-if="validationLog.length > 0"/>
             <div id="validation-placeholder" class="panel-placeholder" v-else>
               Validation log output will show here.
             </div>
           </div>
           <div class="status-panel log-container" v-show="tab === 'ingest'">
-            <log-window v-bind:log="log" v-if="log.length > 0"/>
+            <panel-log-window v-bind:log="log" v-if="log.length > 0"/>
             <div class="panel-placeholder" v-else>
               Ingest log output will show here.
             </div>

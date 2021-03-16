@@ -5,7 +5,9 @@
     "target": "es2015",
     "module": "esnext",
     "allowJs": true,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "sourceMap": true
   },
   "exclude": ["node_modules"],
   "include": ["modules/admin/app/assets/js/datamanager"]

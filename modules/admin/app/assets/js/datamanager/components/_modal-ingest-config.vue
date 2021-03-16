@@ -1,18 +1,18 @@
 <script lang="ts">
 
 import ModalWindow from './_modal-window';
-import {DAO, FileMeta} from '../dao';
+import {FileMeta} from '../types';
+import DataManagerApi from "../api";
 
 import _pick from 'lodash/pick';
 import _size from 'lodash/size';
-import {DOMEvent} from "codemirror";
 
 
 export default {
   components: {ModalWindow},
   props: {
     datasetId: String,
-    api: DAO,
+    api: DataManagerApi,
     config: Object,
     opts: Object,
     waiting: Boolean,

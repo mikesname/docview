@@ -3,12 +3,12 @@
 import ModalWindow from './_modal-window';
 import ModalAlert from './_modal-alert';
 
-import {DAO} from '../dao';
+import DataManagerApi from '../api';
 
 export default {
   components: {ModalWindow, ModalAlert},
   props: {
-    api: DAO,
+    api: DataManagerApi,
     config: Object,
     info: Object,
   },

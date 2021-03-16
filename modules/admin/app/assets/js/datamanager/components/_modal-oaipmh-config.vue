@@ -1,7 +1,7 @@
 <script>
 
 import ModalWindow from './_modal-window';
-import {DAO} from '../dao';
+import DataManagerApi from '../api';
 
 export default {
   components: {ModalWindow},
@@ -9,7 +9,7 @@ export default {
     waiting: Boolean,
     datasetId: String,
     config: Object,
-    api: DAO,
+    api: DataManagerApi,
   },
   data: function() {
     return {

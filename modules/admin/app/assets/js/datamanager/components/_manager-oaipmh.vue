@@ -1,14 +1,14 @@
 <script>
 
 import FilterControl from './_filter-control';
-import ValidateButton from './_validate-button';
-import DeleteButton from './_delete-button';
-import OaipmhConfigModal from './_oaipmh-config-modal';
+import ButtonValidate from './_button-validate';
+import ButtonDelete from './_button-delete';
+import ModalOaipmhConfig from './_modal-oaipmh-config';
 import PanelFilePreview from './_panel-file-preview';
 import FilesTable from './_files-table';
 import DragHandle from './_drag-handle';
 import ModalInfo from './_modal-info';
-import LogWindow from './_log-window';
+import PanelLogWindow from './_panel-log-window';
 
 import MixinStage from './_mixin-stage';
 import MixinTwoPanel from './_mixin-two-panel';
@@ -17,16 +17,16 @@ import MixinValidator from './_mixin-validator';
 import MixinError from './_mixin-error';
 import MixinUtil from './_mixin-util';
 
-import {DAO} from '../dao';
+import DataManagerApi from '../api';
 
 
 export default {
-  components: {FilterControl, FilesTable, DeleteButton, ValidateButton, PanelFilePreview, OaipmhConfigModal, DragHandle, ModalInfo, LogWindow},
+  components: {FilterControl, FilesTable, ButtonDelete, ButtonValidate, PanelFilePreview, ModalOaipmhConfig, DragHandle, ModalInfo, PanelLogWindow},
   mixins: [MixinStage, MixinTwoPanel, MixinValidator, MixinError, MixinPreview, MixinUtil],
   props: {
     fileStage: String,
     config: Object,
-    api: DAO,
+    api: DataManagerApi,
   },
   data: function () {
     return {
@@ -79,7 +79,7 @@ export default {
           this.removeUrlState('harvest-job-id');
         }
       };
-      worker.postMessage({type: 'websocket', url: url, DONE: DAO.DONE_MSG, ERR: DAO.ERR_MSG});
+      worker.postMessage({type: 'websocket', url: url, DONE: DataManagerApi.DONE_MSG, ERR: DataManagerApi.ERR_MSG});
       this.replaceUrlState('harvest-job-id', jobId);
     },
     resumeMonitor: function() {
@@ -108,14 +108,14 @@ export default {
                       v-on:filter="filterFiles"
                       v-on:clear="clearFilter"/>
 
-      <validate-button
+      <button-validate
           v-bind:selected="selectedKeys.length"
           v-bind:disabled="files.length === 0 || harvestJobId !== null"
           v-bind:active="validationRunning"
           v-on:validate="validateFiles(selectedTags)"
       />
 
-      <delete-button
+      <button-delete
           v-bind:selected="selectedKeys.length"
           v-bind:disabled="files.length === 0 || harvestJobId !== null"
           v-bind:active="deleting.length > 0"
@@ -132,7 +132,7 @@ export default {
         Cancel Harvest
       </button>
 
-      <oaipmh-config-modal
+      <modal-oaipmh-config
           v-if="showOptions"
           v-bind:waiting="waiting"
           v-bind:dataset-id="datasetId"
@@ -149,7 +149,6 @@ export default {
     <div id="oaipmh-panel-container" class="panel-container">
       <div class="top-panel">
         <files-table
-            v-bind:api="api"
             v-bind:fileStage="fileStage"
             v-bind:loading-more="loadingMore"
             v-bind:loaded="loaded"
@@ -172,6 +171,8 @@ export default {
             v-on:item-selected="selectItem"
             v-on:item-deselected="deselectItem"
             v-on:deselect-all="deselect"
+            v-on:toggle-all="toggleAll"
+            v-on:toggle-file="toggleFile"
             v-on:info="info"
         />
       </div>
@@ -200,8 +201,8 @@ export default {
           <li>
             <drag-handle
                 v-bind:ns="fileStage"
-                v-bind:p2="$root.$el.querySelector('#oaipmh-status-panels')"
-                v-bind:container="$root.$el.querySelector('#oaipmh-panel-container')"
+                v-bind:p2="() => $root.$el.querySelector('#oaipmh-status-panels')"
+                v-bind:container="() => $root.$el.querySelector('#oaipmh-panel-container')"
                 v-on:resize="setPanelSize"
             />
           </li>
@@ -224,13 +225,13 @@ export default {
             </div>
           </div>
           <div class="status-panel log-container" v-show="tab === 'validation'">
-            <log-window v-bind:log="validationLog" v-if="validationLog.length > 0"/>
+            <panel-log-window v-bind:log="validationLog" v-if="validationLog.length > 0"/>
             <div class="panel-placeholder" v-else>
               Validation log output will show here.
             </div>
           </div>
           <div class="status-panel log-container" v-show="tab === 'harvest'">
-            <log-window v-bind:log="log" v-if="log.length > 0"/>
+            <panel-log-window v-bind:log="log" v-if="log.length > 0"/>
             <div class="panel-placeholder" v-else>
               Harvest log output will show here.
             </div>

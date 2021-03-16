@@ -204,8 +204,8 @@ export default {
                 <i class="fa fa-refresh"></i>
               </button>
               <drag-handle v-bind:ns="'transformation-editor-preview-drag'"
-                           v-bind:p2="$root.$el.querySelector('#transformation-editor-preview-section')"
-                           v-bind:container="$root.$el.querySelector('#transformation-editor-panes')"
+                           v-bind:p2="() => $root.$el.querySelector('#transformation-editor-preview-section')"
+                           v-bind:container="() => $root.$el.querySelector('#transformation-editor-panes')"
                            v-on:resize="setPanelSize"/>
             </div>
             <div id="transformation-editor-previews">

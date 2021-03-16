@@ -98,9 +98,14 @@
       "**/__tests__/**/*.[jt]s?(x)",
       "**/?(*.)+(spec|test).[tj]s?(x)"
     ],
+    "modulePathIgnorePatterns": [
+      "/target/",
+      "/.+\/target/"
+    ],
     "testPathIgnorePatterns": [
       "/node_modules/",
-      "/target/"
+      "/target/",
+      "/.+\/target/"
     ],
     "transform": {
       "^.+\\.(ts|tsx)$": "ts-jest",

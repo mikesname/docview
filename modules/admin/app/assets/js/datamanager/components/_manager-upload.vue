@@ -1,12 +1,12 @@
 <script>
 
 import FilterControl from './_filter-control';
-import ValidateButton from './_validate-button';
-import DeleteButton from './_delete-button';
+import ButtonValidate from './_button-validate';
+import ButtonDelete from './_button-delete';
 import FilesTable from './_files-table';
 import DragHandle from './_drag-handle';
 import ModalInfo from './_modal-info';
-import LogWindow from './_log-window';
+import PanelLogWindow from './_panel-log-window';
 import UploadProgress from './_upload-progress';
 import PanelFilePreview from './_panel-file-preview';
 import MixinStage from './_mixin-stage';
@@ -16,7 +16,7 @@ import MixinValidator from './_mixin-validator';
 import MixinError from './_mixin-error';
 import MixinUtil from './_mixin-util';
 
-import {DAO} from '../dao';
+import DataManagerApi from '../api';
 
 import _findIndex from 'lodash/findIndex';
 import _pick from 'lodash/pick';
@@ -63,13 +63,13 @@ function sequentialUpload(uploadFunc, argArray, index, {done, cancelled}) {
 }
 
 export default {
-  components: {FilterControl, FilesTable, LogWindow, DragHandle, ModalInfo, PanelFilePreview, ValidateButton, DeleteButton, UploadProgress},
+  components: {FilterControl, FilesTable, PanelLogWindow, DragHandle, ModalInfo, PanelFilePreview, ButtonValidate, ButtonDelete, UploadProgress},
   mixins: [MixinStage, MixinTwoPanel, MixinPreview, MixinValidator, MixinError, MixinUtil],
   props: {
     datasetId: String,
     fileStage: String,
     config: Object,
-    api: DAO,
+    api: DataManagerApi,
   },
   data: function () {
     return {
@@ -186,14 +186,14 @@ export default {
                       v-on:filter="filterFiles"
                       v-on:clear="clearFilter"/>
 
-      <validate-button
+      <button-validate
           v-bind:selected="selectedKeys.length"
           v-bind:disabled="files.length === 0 || uploading.length > 0"
           v-bind:active="validationRunning"
           v-on:validate="validateFiles(selectedTags)"
       />
 
-      <delete-button
+      <button-delete
           v-bind:selected="selectedKeys.length"
           v-bind:disabled="files.length === 0 || uploading.length > 0"
           v-bind:active="deleting.length > 0"
@@ -218,7 +218,6 @@ export default {
     <div id="upload-panel-container" class="panel-container">
       <div class="top-panel">
         <files-table
-            v-bind:api="api"
             v-bind:fileStage="fileStage"
             v-bind:dropping="dropping"
             v-bind:loaded="loaded"
@@ -241,6 +240,8 @@ export default {
             v-on:show-preview="showPreview"
             v-on:item-selected="selectItem"
             v-on:item-deselected="deselectItem"
+            v-on:toggle-all="toggleAll"
+            v-on:toggle-file="toggleFile"
             v-on:deselect-all="deselect"
             v-on:info="info"
         />
@@ -270,8 +271,8 @@ export default {
           <li>
             <drag-handle
                 v-bind:ns="fileStage"
-                v-bind:p2="$root.$el.querySelector('#upload-status-panel')"
-                v-bind:container="$root.$el.querySelector('#upload-panel-container')"
+                v-bind:p2="() => $root.$el.querySelector('#upload-status-panel')"
+                v-bind:container="() => $root.$el.querySelector('#upload-panel-container')"
                 v-on:resize="setPanelSize"
             />
           </li>
@@ -294,13 +295,13 @@ export default {
             </div>
           </div>
           <div class="status-panel log-container" v-show="tab === 'validation'">
-            <log-window v-bind:log="validationLog" v-if="validationLog.length > 0"/>
+            <panel-log-window v-bind:log="validationLog" v-if="validationLog.length > 0"/>
             <div id="validation-placeholder" class="panel-placeholder" v-else>
               Validation log output will show here.
             </div>
           </div>
           <div class="status-panel log-container" v-show="tab === 'upload'">
-            <log-window v-bind:log="log" v-if="log.length > 0"/>
+            <panel-log-window v-bind:log="log" v-if="log.length > 0"/>
             <div class="panel-placeholder" v-else>
               Upload log output will show here.
             </div>

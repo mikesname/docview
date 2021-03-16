@@ -1,25 +1,26 @@
 <script lang="ts">
 
-import DatasetForm from './_dataset-form';
-import OaipmhManager from './_oaipmh-manager';
-import UploadManager from './_upload-manager';
-import IngestManager from './_ingest-manager';
-import RsManager from './_rs-manager';
-import ConvertManager from './_convert-manager';
+import ModalDatasetConfig from './_modal-dataset-config.vue';
+import ManagerOaipmh from './_manager-oaipmh';
+import ManagerUpload from './_manager-upload';
+import ManagerIngest from './_manager-ingest';
+import ManagerRs from './_manager-rs';
+import ManagerConvert from './_manager-convert.vue';
 
 import MixinUtil from './_mixin-util';
-import {DAO, ImportDataset, ImportDatasetSrc} from '../dao';
+import {ImportDataset, ImportDatasetSrc} from '../types';
+import DataManagerApi from "../api";
 
 import _find from 'lodash/find';
 import _merge from 'lodash/merge';
 import _omit from 'lodash/omit';
 
 export default {
-  components: {DatasetForm, OaipmhManager, UploadManager, IngestManager, RsManager, ConvertManager},
+  components: {ModalDatasetConfig, ManagerOaipmh, ManagerUpload, ManagerIngest, ManagerRs, ManagerConvert},
   mixins: [MixinUtil],
   props: {
     config: Object,
-    api: DAO,
+    api: DataManagerApi,
     initTab: String,
   },
   data: function() {
@@ -125,7 +126,7 @@ export default {
       <span class="close" v-on:click="error = null">&times;</span>
       {{error}}
     </div>
-    <dataset-form v-if="showForm"
+    <modal-dataset-config v-if="showForm"
                   v-bind:info="dataset"
                   v-bind:config="config"
                   v-bind:api="api"
@@ -232,7 +233,7 @@ export default {
         </li>
       </ul>
       <div id="tab-input" class="stage-tab" v-show="tab === 'input'">
-        <oaipmh-manager
+        <manager-oaipmh
             v-if="dataset.src === 'oaipmh'"
             v-bind:dataset-id="dataset.id"
             v-bind:fileStage="config.input"
@@ -240,7 +241,7 @@ export default {
             v-bind:active="tab === 'input'"
             v-bind:api="api"
             v-on:error="setError"  />
-        <rs-manager
+        <manager-rs
             v-else-if="dataset.src === 'rs'"
             v-bind:dataset-id="dataset.id"
             v-bind:fileStage="config.input"
@@ -248,7 +249,7 @@ export default {
             v-bind:active="tab === 'input'"
             v-bind:api="api"
             v-on:error="setError"  />
-        <upload-manager
+        <manager-upload
             v-else
             v-bind:dataset-id="dataset.id"
             v-bind:fileStage="config.input"
@@ -258,7 +259,7 @@ export default {
             v-on:error="setError"  />
       </div>
       <div id="tab-convert" class="stage-tab" v-show="tab === 'convert'">
-        <convert-manager
+        <manager-convert
             v-bind:dataset-id="dataset.id"
             v-bind:fileStage="config.output"
             v-bind:config="config"
@@ -267,7 +268,7 @@ export default {
             v-on:error="setError" />
       </div>
       <div id="tab-ingest" class="stage-tab" v-show="tab === 'ingest'">
-        <ingest-manager
+        <manager-ingest
             v-bind:dataset-id="dataset.id"
             v-bind:fileStage="config.output"
             v-bind:config="config"

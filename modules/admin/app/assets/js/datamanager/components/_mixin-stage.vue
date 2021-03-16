@@ -6,7 +6,8 @@ import _forIn from 'lodash/forIn';
 import _fromPairs from 'lodash/fromPairs';
 import _isEmpty from 'lodash/isEmpty';
 
-import {DAO, FileMeta} from '../dao';
+import {FileMeta} from '../types';
+import DataManagerApi from "../api";
 
 
 let initialStageState = function(): object {
@@ -34,7 +35,7 @@ export default {
   props: {
     datasetId: String,
     active: Boolean,
-    api: DAO,
+    api: DataManagerApi,
   },
   data: function(): object {
     return initialStageState();
@@ -132,10 +133,24 @@ export default {
     deselectItem: function(file) {
       this.$delete(this.selected, file.key);
     },
-    showError: function(msg: string, exp?: object) {}, // Overridden by inheritors
     deselect: function() {
       this.previewing = null;
-    }
+    },
+    toggleFile: function(file) {
+      if (this.selected[file.key]) {
+        this.deselectItem(file);
+      } else {
+        this.selectItem(file);
+      }
+    },
+    toggleAll: function() {
+      if (this.selectedKeys.length === this.files.length) {
+        this.selected = {};
+      } else {
+        this.selected = _fromPairs(this.files.map(f => [f.key, f]));
+      }
+    },
+    showError: function(msg: string, exp?: object) {}, // Overridden by inheritors
   },
   watch: {
     active: function(newValue) {

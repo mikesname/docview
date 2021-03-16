@@ -12,7 +12,7 @@ module.exports = (env, argv) => {
       }
     })],
     stats: 'minimal',
-    devtool: 'source-map',
+    devtool: 'eval-source-map',
     cache: true,
     module: {
       rules: [

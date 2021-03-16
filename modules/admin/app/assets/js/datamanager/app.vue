@@ -2,7 +2,7 @@
 
 import DatasetManager from './components/_dataset-manager';
 import MixinUtil from './components/_mixin-util';
-import {DAO} from "./dao";
+import DataManagerApi from "./api";
 
 
 if (typeof window !== 'undefined') {
@@ -17,7 +17,7 @@ export default {
   data: function() {
     return {
       config: CONFIG,
-      api: new DAO(SERVICE, CONFIG.repoId),
+      api: new DataManagerApi(SERVICE, CONFIG.repoId),
       tab: 'input',
     }
   },
