@@ -8,7 +8,7 @@ import models.{HarvestEvent, UserProfile}
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.Future.{successful => immediate}
 
-case class MockHarvestEventService(events: ListBuffer[HarvestEvent] = collection.mutable.ListBuffer[HarvestEvent]) extends HarvestEventService {
+case class MockHarvestEventService(events: ListBuffer[HarvestEvent] = collection.mutable.ListBuffer.empty) extends HarvestEventService {
 
   override def get(repoId: String, datasetId: Option[String], jobId: Option[String]) =
     immediate(events.filter(e => e.repoId == repoId
