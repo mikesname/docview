@@ -13,6 +13,11 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v1
 
+    - name: Setup Node
+      uses: actions/setup-node@v2
+      with:
+        node-version: '10'
+
     - name: Setup Scala
       uses: olafurpg/setup-scala@v10
       with:
@@ -23,6 +28,9 @@ jobs:
 
     - name: Install NPM deps
       run: npm install
+
+    - name: Run Jest tests
+      run: npm test
 
     - name: Coursier cache
       uses: coursier/cache-action@v5
