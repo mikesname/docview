@@ -17,7 +17,7 @@ case class Data @Inject()(
 
   implicit val rd: Readable[Model] = Model.Converter
 
-  private def passThroughHeaders(headers: Map[String, Seq[String]],
+  private def passThroughHeaders(headers: Map[String, scala.collection.Seq[String]],
                                  filter: Seq[String] = Seq.empty): Seq[(String, String)] = {
     headers.filter(kv => if (filter.isEmpty) true else filter.contains(kv._1)).flatMap { case (k, seq) =>
       seq.map(s => k -> s)

@@ -46,7 +46,7 @@ object EnumUtils {
    */
   private def enumFormBinder[E <: Enumeration](enum: E): Formatter[E#Value] = new Formatter[E#Value] {
     def bind(key: String, data: Map[String, String]): Either[Seq[FormError], E#Value] = {
-      play.api.data.format.Formats.stringFormat.bind(key, data).right.flatMap { s =>
+      play.api.data.format.Formats.stringFormat.bind(key, data).flatMap { s =>
         scala.util.control.Exception.allCatch[E#Value]
           .either(enum.withName(s))
           .left.map(e => Seq(FormError(key, "errors.invalidValue", Nil)))

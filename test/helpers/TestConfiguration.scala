@@ -245,7 +245,7 @@ trait TestConfiguration {
   }
 
   protected def formData(html: String): Map[String, Seq[String]] = {
-    import scala.collection.JavaConverters._
+    import scala.jdk.CollectionConverters._
     val doc = Jsoup.parse(html)
     val inputData = doc.select("input,textarea").asScala
         .foldLeft(Map.empty[String,Seq[String]]) { case (acc, elem) =>

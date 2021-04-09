@@ -32,7 +32,7 @@ case class MockAccountManager @Inject()(executionContext: ExecutionContext) exte
       }
 
     def findAll: Future[Seq[OAuth2Association]] =
-      immediate(mockdata.oauth2AssociationFixtures)
+      immediate(mockdata.oauth2AssociationFixtures.toSeq)
 
     def findByProviderInfo(providerUserId: String, provider: String): Future[Option[OAuth2Association]] =
       immediate(mockdata.oauth2AssociationFixtures.find {
@@ -40,7 +40,7 @@ case class MockAccountManager @Inject()(executionContext: ExecutionContext) exte
       })
 
     def findForAccount(id: String): Future[Seq[OAuth2Association]] =
-      immediate(mockdata.oauth2AssociationFixtures.filter(_.id == id))
+      immediate(mockdata.oauth2AssociationFixtures.filter(_.id == id).toSeq)
   }
 
   override def openId: OpenIdAssociationManager = new OpenIdAssociationManager {
@@ -56,7 +56,7 @@ case class MockAccountManager @Inject()(executionContext: ExecutionContext) exte
     def findByUrl(url: String): Future[Option[OpenIDAssociation]] =
       immediate(mockdata.openIdAssociationFixtures.find(_.url == url))
 
-    def findAll: Future[Seq[OpenIDAssociation]] = immediate(mockdata.openIdAssociationFixtures)
+    def findAll: Future[Seq[OpenIDAssociation]] = immediate(mockdata.openIdAssociationFixtures.toSeq)
   }
 
   override def get(id: String): Future[Account] =
@@ -69,7 +69,7 @@ case class MockAccountManager @Inject()(executionContext: ExecutionContext) exte
     immediate(mockdata.accountFixtures.values.find(_.email.toLowerCase == email.toLowerCase))
 
   override def findAllById(ids: Seq[String]): Future[Seq[Account]] =
-    immediate(mockdata.accountFixtures.filterKeys(id => ids.contains(id)).values.toSeq)
+    immediate(mockdata.accountFixtures.filter(kv => ids.contains(kv._1)).values.toSeq)
 
   override def authenticateById(id: String, pw: String, verifiedOnly: Boolean = false): Future[Option[Account]] = immediate {
     for {

@@ -281,7 +281,10 @@ trait RestService {
   private[data] def parsePage[T](response: WSResponse, context: Option[String])(implicit rd: Reads[T]): Page[T] = {
     checkError(response).json.validate(Reads.seq(rd)).fold(
       invalid => throw BadJson(
-        invalid, url = context, data = Some(Json.prettyPrint(response.json))),
+        invalid,
+        url = context,
+        data = Some(Json.prettyPrint(response.json))
+      ),
       items => parsePagination(response, context) match {
         case Some((offset, limit, total)) => Page(
           items = items,
@@ -297,7 +300,10 @@ trait RestService {
   private[data] def jsonReadToRestError[T](json: JsValue, reader: Reads[T], context: Option[String] = None): T = {
     json.validate(reader).fold(
       invalid => throw BadJson(
-        invalid, url = context, data = Some(Json.prettyPrint(json))),
+        invalid,
+        url = context,
+        data = Some(Json.prettyPrint(json))
+      ),
       valid => valid
     )
   }

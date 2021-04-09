@@ -41,7 +41,8 @@ case class Feedback @Inject()(
       TIMESTAMP -> nonEmptyText,
       BLANK_CHECK -> text.verifying(s => s.isEmpty)
     )(CheckFeedbackData.apply)(CheckFeedbackData.unapply)
-     .verifying(blankFieldIsBlank).verifying(formSubmissionTime(appComponents.config))
+      .verifying(blankFieldIsBlank)
+      .verifying(formSubmissionTime(appComponents.config))
   )
 
   private def getCopyMail(feedbackType: Option[models.Feedback.Type.Value]): Seq[String] = {

@@ -81,7 +81,7 @@ trait CoreActionBuilders extends BaseController with ControllerHelpers {
     * Indicates that the current controller is secured, which,
     * if set to false, overrides staffOnly and verifiedOnly.
     */
-  protected lazy val secured: Boolean = config.getOptional[Boolean]("ehri.secured").getOrElse(true)
+  protected lazy val secured: Boolean = conf.configuration.getOptional[Boolean]("ehri.secured").getOrElse(true)
 
   /**
     * Abstract response methods that should be implemented by inheritors.

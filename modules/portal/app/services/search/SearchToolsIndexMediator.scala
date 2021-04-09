@@ -15,7 +15,7 @@ import services.data.Constants
 
 import java.util.Properties
 import javax.inject.Inject
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.concurrent.{ExecutionContext, Future}
 
 case class SearchToolsIndexMediator @Inject()(
@@ -99,7 +99,7 @@ case class SearchToolsIndexMediatorHandle(
 
   override def indexChildren(entityType: EntityType.Value, id: String): Future[Unit] = Future {
     logger.debug(s"Index children: $entityType|$id")
-    indexHelper(entityType + "|" + id).run()
+    indexHelper(entityType.toString + "|" + id).run()
   }
 
   override def indexTypes(entityTypes: Seq[EntityType.Value]): Future[Unit] = Future {

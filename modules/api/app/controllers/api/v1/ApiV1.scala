@@ -158,7 +158,7 @@ case class ApiV1 @Inject()(
     (for {
       tp <- js.value.get("type") if tp == JsString(filter.et.toString)
       attrs <- js.value.get("attributes").flatMap(_.asOpt[JsObject])
-    } yield JsObject(js.value.updated("attributes", filterObject(attrs, filter.fields)).toSeq))
+    } yield JsObject(js.value.toMap.updated("attributes", filterObject(attrs, filter.fields)).toSeq))
       .getOrElse(js)
 
     fields.foldLeft(js.as[JsObject])(filterType)

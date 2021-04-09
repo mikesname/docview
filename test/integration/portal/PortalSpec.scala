@@ -181,7 +181,7 @@ class PortalSpec extends IntegrationTestRunner {
     val is = bytes.iterator.asInputStream
     val zis = new ZipInputStream(is)
     try {
-      Stream
+      LazyList
         .continually(zis.getNextEntry)
         .takeWhile(_ != null)
         .toList

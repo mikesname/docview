@@ -34,7 +34,7 @@ package object forms {
     */
   val entityForm: Mapping[Entity] = Forms.of(new Formatter[Entity] {
     def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Entity] = {
-      play.api.data.format.Formats.stringFormat.bind(key, data).right.flatMap { s =>
+      play.api.data.format.Formats.stringFormat.bind(key, data).flatMap { s =>
         scala.util.control.Exception.allCatch[Entity]
           .either(Json.parse(s).as[Entity](Entity.entityReads))
           .left.map(e => Seq(FormError(key, "error.jsonObj", Nil)))
